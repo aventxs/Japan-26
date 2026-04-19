@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#050810">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Japan Planner">
+<title>Japan Elite Planner</title>
+<link rel="manifest" id="manifest-placeholder">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --ink:       #050810;
+    --paper:     #0d1428;
+    --panel:     #111827;
+    --border:    rgba(255,255,255,0.07);
+    --seal:      #c8372d;
+    --gold:      #d4a84b;
+    --mist:      rgba(255,255,255,0.55);
+    --snow:      rgba(255,255,255,0.9);
+    --bloom:     #e8a0b0;
+    --complete:  #2dd4a0;
+    --radius:    20px;
+    --font-jp:   'Shippori Mincho', serif;
+    --font-en:   'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--ink);
+    color: var(--snow);
+    font-family: var(--font-en);
+    overscroll-behavior: none;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  /* ── LAYOUT ── */
+  #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
+
+  /* ── SPLASH / KAMON ── */
+  #splash {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #splash.hidden { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+
+  .kamon {
+    width: 80px; height: 80px;
+    animation: kamonSpin 3s linear infinite;
+  }
+  @keyframes kamonSpin { to { transform: rotate(360deg); } }
+
+  .splash-title {
+    font-family: var(--font-jp);
+    font-size: 28px; font-weight: 800;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--gold), #fff 60%, var(--bloom));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .splash-sub { font-size: 11px; letter-spacing: 3px; color: var(--mist); text-transform: uppercase; }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 24px 20px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+    background: linear-gradient(to bottom, var(--ink) 80%, transparent);
+  }
+  .header-brand { display: flex; flex-direction: column; gap: 2px; }
+  .header-jp { font-family: var(--font-jp); font-size: 22px; font-weight: 800; letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--bloom)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header-en { font-size: 10px; letter-spacing: 3px; color: var(--mist); text-transform: uppercase; }
+
+  .header-right { display: flex; gap: 10px; align-items: center; }
+
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--panel); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; transition: all 0.2s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .icon-btn:active { transform: scale(0.92); background: #1e2840; }
+
+  /* ── PROGRESS RING ── */
+  .progress-section {
+    margin: 8px 20px 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  .ring-wrap { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  circle.track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 5; }
+  circle.fill  { fill: none; stroke: var(--gold); stroke-width: 5; stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .ring-pct {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: var(--font-jp); font-size: 18px; font-weight: 800; color: var(--gold);
+  }
+  .ring-pct span { font-family: var(--font-en); font-size: 9px; color: var(--mist); letter-spacing: 1px; }
+
+  .progress-info { flex: 1; }
+  .progress-info h3 { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .progress-info p { font-size: 11px; color: var(--mist); line-height: 1.5; }
+
+  .mini-bars { display: flex; gap: 4px; margin-top: 10px; }
+  .mini-bar {
+    height: 4px; flex: 1; border-radius: 2px;
+    background: rgba(255,255,255,0.1);
+    transition: background 0.4s;
+  }
+  .mini-bar.done { background: var(--complete); }
+  .mini-bar.partial { background: var(--gold); }
+
+  /* ── TAB BAR ── */
+  .tabs {
+    display: flex; gap: 6px; margin: 0 20px 20px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 14px; padding: 5px;
+  }
+  .tab {
+    flex: 1; padding: 8px 4px; border-radius: 10px; border: none;
+    background: transparent; color: var(--mist); font-family: var(--font-en);
+    font-size: 11px; letter-spacing: 0.5px; cursor: pointer;
+    transition: all 0.25s; -webkit-user-select: none; user-select: none;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .tab .tab-icon { font-size: 15px; }
+  .tab.active { background: rgba(212,168,75,0.15); color: var(--gold); font-weight: 500; }
+  .tab:active { transform: scale(0.96); }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeUp 0.3s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    margin: 0 20px 10px;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--mist);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+  /* ── DAY CARDS ── */
+  .day {
+    margin: 0 15px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--panel);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .day.completed { border-color: rgba(45,212,160,0.2); }
+
+  .day-header {
+    padding: 16px 18px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; -webkit-user-select: none; user-select: none;
+  }
+  .day-num {
+    width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(212,168,75,0.2), rgba(212,168,75,0.05));
+    border: 1px solid rgba(212,168,75,0.25);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: var(--font-jp); font-size: 17px; font-weight: 800; color: var(--gold);
+  }
+  .day-num span { font-family: var(--font-en); font-size: 8px; letter-spacing:1px; color: var(--mist); font-weight: 400; }
+
+  .day-info { flex: 1; min-width: 0; }
+  .day-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .day-city { font-size: 11px; color: var(--mist); display: flex; align-items: center; gap: 4px; }
+  .city-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--seal); }
+
+  .day-chevron { font-size: 11px; color: var(--mist); transition: transform 0.3s; }
+  .day.open .day-chevron { transform: rotate(180deg); }
+
+  .day-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .day.open .day-body { max-height: 1200px; }
+
+  .day-divider { height: 1px; background: var(--border); margin: 0 18px; }
+
+  /* ── ACTIVITY ITEMS ── */
+  .activities { padding: 12px 18px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  .activity {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 14px; border-radius: 14px;
+    background: rgba(255,255,255,0.03); border: 1px solid transparent;
+    cursor: pointer; transition: all 0.25s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .activity:active { transform: scale(0.98); }
+  .activity.done { background: rgba(45,212,160,0.05); border-color: rgba(45,212,160,0.15); }
+
+  .activity-check {
+    width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0; margin-top: 1px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s; font-size: 12px;
+  }
+  .activity.done .activity-check { background: var(--complete); border-color: var(--complete); }
+
+  .activity-content { flex: 1; min-width: 0; }
+  .activity-name { font-size: 13px; font-weight: 400; transition: color 0.25s; }
+  .activity.done .activity-name { color: var(--mist); text-decoration: line-through; }
+  .activity-meta { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+  .activity-tag {
+    font-size: 10px; letter-spacing: 0.5px; padding: 2px 7px; border-radius: 6px;
+    background: rgba(255,255,255,0.07); color: var(--mist);
+  }
+  .activity-tag.type-eat   { background: rgba(232,160,176,0.15); color: var(--bloom); }
+  .activity-tag.type-see   { background: rgba(212,168,75,0.12);  color: var(--gold); }
+  .activity-tag.type-do    { background: rgba(100,150,255,0.12); color: #a0b4ff; }
+  .activity-tag.type-stay  { background: rgba(255,255,255,0.07); color: var(--mist); }
+  .activity-tag.type-travel{ background: rgba(45,212,160,0.1);   color: var(--complete); }
+
+  .activity-note { font-size: 11px; color: var(--mist); margin-top: 4px; font-style: italic; }
+
+  /* ── TRIP STATS ── */
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin: 0 15px 20px;
+  }
+  .stat-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-icon { font-size: 20px; }
+  .stat-value { font-family: var(--font-jp); font-size: 24px; font-weight: 800; color: var(--gold); }
+  .stat-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--mist); }
+
+  /* ── PACKING LIST ── */
+  .pack-section { margin: 0 15px 20px; }
+  .pack-category { margin-bottom: 16px; }
+  .pack-cat-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--mist);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  }
+  .pack-cat-label .cat-icon { font-size: 14px; }
+
+  .pack-items { display: flex; flex-direction: column; gap: 6px; }
+  .pack-item {
+    display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+    border-radius: 12px; border: 1px solid var(--border); background: var(--panel);
+    cursor: pointer; transition: all 0.25s;
+    -webkit-user-select: none; user-select: none;
+  }
+  .pack-item:active { transform: scale(0.98); }
+  .pack-item.packed { background: rgba(45,212,160,0.05); border-color: rgba(45,212,160,0.15); }
+  .pack-check {
+    width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s; font-size: 11px;
+  }
+  .pack-item.packed .pack-check { background: var(--complete); border-color: var(--complete); }
+  .pack-item-name { font-size: 13px; flex: 1; transition: color 0.25s; }
+  .pack-item.packed .pack-item-name { color: var(--mist); text-decoration: line-through; }
+  .pack-item-badge {
+    font-size: 9px; letter-spacing: 1px; padding: 2px 6px; border-radius: 5px;
+    text-transform: uppercase;
+  }
+  .badge-essential { background: rgba(200,55,45,0.2); color: #f08080; }
+  .badge-optional  { background: rgba(255,255,255,0.07); color: var(--mist); }
+
+  /* ── NOTES ── */
+  .notes-area {
+    margin: 0 15px 20px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .notes-header { padding: 14px 18px; font-size: 12px; letter-spacing: 1px; color: var(--mist); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .notes-input {
+    width: 100%; padding: 16px 18px; background: transparent; border: none; outline: none;
+    color: var(--snow); font-family: var(--font-en); font-size: 13px; line-height: 1.7;
+    resize: none; min-height: 140px;
+  }
+  .notes-input::placeholder { color: rgba(255,255,255,0.2); }
+
+  /* ── QUICK INFO PILLS ── */
+  .info-pills { display: flex; gap: 8px; padding: 0 15px 20px; overflow-x: auto; scrollbar-width: none; }
+  .info-pills::-webkit-scrollbar { display: none; }
+  .info-pill {
+    flex-shrink: 0; padding: 10px 14px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 7px; font-size: 12px;
+  }
+  .info-pill .pill-icon { font-size: 15px; }
+  .info-pill span { white-space: nowrap; color: var(--mist); }
+  .info-pill strong { color: var(--snow); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 18px; font-size: 12px; letter-spacing: 0.5px;
+    opacity: 0; transition: all 0.3s; z-index: 200; white-space: nowrap;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── OFFLINE BADGE ── */
+  #offline-badge {
+    position: fixed; top: 12px; right: 12px; z-index: 500;
+    background: rgba(200,55,45,0.9); border-radius: 8px;
+    padding: 5px 10px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    display: none;
+  }
+  body.offline #offline-badge { display: block; }
+
+  /* ── SEAL DECORATION ── */
+  .seal-deco {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--seal), #8b1a14);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-jp); font-size: 11px; font-weight: 800;
+    color: rgba(255,255,255,0.85); letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(200,55,45,0.3);
+    flex-shrink: 0;
+  }
+
+  /* ── INSTALL PROMPT ── */
+  #install-banner {
+    margin: 0 15px 16px;
+    background: linear-gradient(135deg, rgba(212,168,75,0.12), rgba(232,160,176,0.08));
+    border: 1px solid rgba(212,168,75,0.25); border-radius: var(--radius);
+    padding: 14px 18px; display: none; align-items: center; gap: 12px;
+  }
+  #install-banner.visible { display: flex; animation: fadeUp 0.4s ease both; }
+  #install-banner p { flex:1; font-size: 12px; color: var(--mist); line-height: 1.5; }
+  #install-banner strong { color: var(--gold); }
+  .install-btn {
+    background: var(--gold); color: var(--ink); border: none; border-radius: 10px;
+    padding: 8px 14px; font-family: var(--font-en); font-size: 11px; font-weight: 600;
+    cursor: pointer; flex-shrink: 0; letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .install-btn:active { transform: scale(0.95); }
+
+  /* ── SCROLL HINT ── */
+  .scroll-hint { text-align: center; padding: 0 0 40px; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 2px; }
+
+  /* ── CHERRY BLOSSOM PETALS ── */
+  .petal {
+    position: fixed; pointer-events: none; z-index: 998;
+    font-size: 14px; opacity: 0;
+    animation: petalFall 4s ease-in forwards;
+  }
+  @keyframes petalFall {
+    0%   { opacity: 0.7; transform: translateY(-20px) rotate(0deg); }
+    100% { opacity: 0;   transform: translateY(100vh) rotate(360deg); }
+  }
+</style>
+
+</head>
+<body>
+
+<div id="offline-badge">✈ Offline</div>
+<div id="toast"></div>
+
+<!-- SPLASH -->
+
+<div id="splash">
+  <svg class="kamon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="45" stroke="#d4a84b" stroke-width="1.5" opacity="0.4"/>
+    <circle cx="50" cy="50" r="35" stroke="#d4a84b" stroke-width="1" opacity="0.3"/>
+    <!-- 16-petal chrysanthemum -->
+    <g fill="#d4a84b">
+      <ellipse cx="50" cy="20" rx="5" ry="12" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(22.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(45 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(67.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(90 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(112.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(135 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(157.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(180 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(202.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(225 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(247.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(270 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(292.5 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(315 50 50)" opacity="0.9"/>
+      <ellipse cx="50" cy="20" rx="5" ry="12" transform="rotate(337.5 50 50)" opacity="0.9"/>
+    </g>
+    <circle cx="50" cy="50" r="8" fill="#d4a84b"/>
+  </svg>
+  <div class="splash-title">日本旅行</div>
+  <div class="splash-sub">Elite Travel Planner</div>
+</div>
+
+<!-- APP -->
+
+<div id="app">
+  <div class="header">
+    <div class="header-brand">
+      <div class="header-jp">日本旅行</div>
+      <div class="header-en">Elite Planner · 2025</div>
+    </div>
+    <div class="header-right">
+      <div class="icon-btn" id="petal-btn" title="Celebrate">🌸</div>
+      <div class="icon-btn" id="reset-btn" title="Reset Progress">↺</div>
+    </div>
+  </div>
+
+  <!-- INSTALL BANNER -->
+
+  <div id="install-banner">
+    <span style="font-size:22px">📲</span>
+    <p><strong>Add to Home Screen</strong><br>Install for offline access on this trip</p>
+    <button class="install-btn" id="install-btn">Install</button>
+  </div>
+
+  <!-- TABS -->
+
+  <div class="tabs">
+    <button class="tab active" data-view="itinerary">
+      <span class="tab-icon">🗾</span>Itinerary
+    </button>
+    <button class="tab" data-view="pack">
+      <span class="tab-icon">🎒</span>Packing
+    </button>
+    <button class="tab" data-view="info">
+      <span class="tab-icon">⛩</span>Tips
+    </button>
+    <button class="tab" data-view="notes">
+      <span class="tab-icon">✍🏽</span>Notes
+    </button>
+  </div>
+
+  <!-- PROGRESS RING -->
+
+  <div class="progress-section">
+    <div class="ring-wrap">
+      <svg width="72" height="72" viewBox="0 0 72 72">
+        <circle class="track" cx="36" cy="36" r="30"/>
+        <circle class="fill" id="ring-fill" cx="36" cy="36" r="30"
+          stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <div class="ring-pct"><span id="ring-pct-val">0</span>%<span>done</span></div>
+    </div>
+    <div class="progress-info">
+      <h3 id="progress-title">Your journey awaits</h3>
+      <p id="progress-sub">Tap activities to mark them complete as you go.</p>
+      <div class="mini-bars" id="mini-bars"></div>
+    </div>
+  </div>
+
+  <!-- ── ITINERARY VIEW ── -->
+
+  <div class="view active" id="view-itinerary">
+    <div class="section-label">10-Day Itinerary</div>
+    <div id="days-container"></div>
+    <div class="scroll-hint">· · · · ·</div>
+  </div>
+
+  <!-- ── PACKING VIEW ── -->
+
+  <div class="view" id="view-pack">
+    <div class="section-label">Packing List</div>
+    <div class="pack-section" id="pack-container"></div>
+    <div class="scroll-hint">· · · · ·</div>
+  </div>
+
+  <!-- ── INFO VIEW ── -->
+
+  <div class="view" id="view-info">
+    <div class="section-label">Quick Reference</div>
+    <div class="info-pills">
+      <div class="info-pill"><span class="pill-icon">🗣</span><span><strong>Emergency</strong> 110 / 119</span></div>
+      <div class="info-pill"><span class="pill-icon">💴</span><span><strong>Currency</strong> JPY ¥</span></div>
+      <div class="info-pill"><span class="pill-icon">🔌</span><span><strong>Voltage</strong> 100V Type A</span></div>
+      <div class="info-pill"><span class="pill-icon">📶</span><span><strong>SIM</strong> IIJmio / Docomo</span></div>
+      <div class="info-pill"><span class="pill-icon">🚄</span><span><strong>Rail Pass</strong> JR 14-day</span></div>
+      <div class="info-pill"><span class="pill-icon">⏰</span><span><strong>Timezone</strong> JST +9</span></div>
+    </div>
+    <div class="section-label">Tokyo Tips</div>
+    <div id="tips-container" class="pack-section"></div>
+    <div class="scroll-hint">· · · · ·</div>
+  </div>
+
+  <!-- ── NOTES VIEW ── -->
+
+  <div class="view" id="view-notes">
+    <div class="section-label">Travel Notes</div>
+    <div class="notes-area">
+      <div class="notes-header">✍🏽&nbsp; Personal Notes — saved automatically</div>
+      <textarea class="notes-input" id="notes-input" placeholder="Hotel confirmation codes, phrases in Japanese, things to remember…&#10;&#10;ありがとう (arigatou) — Thank you&#10;すみません (sumimasen) — Excuse me&#10;どこですか (doko desu ka) — Where is…?"></textarea>
+    </div>
+
+```
+<div class="section-label">Useful Phrases</div>
+<div class="pack-section">
+  <div class="pack-items" id="phrases-list"></div>
+</div>
+<div class="scroll-hint">· · · · ·</div>
+```
+
+  </div>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+const ITINERARY = [
+  {
+    day: 1, title: "Arrival — Tokyo", city: "Tokyo",
+    activities: [
+      { id:"d1a1", name:"Narita / Haneda — Arrivals Hall", type:"travel", note:"Collect JR Pass at airport desk" },
+      { id:"d1a2", name:"N'EX or Limousine Bus to hotel", type:"travel", note:"~¥3,000–¥4,000" },
+      { id:"d1a3", name:"Check in & freshen up", type:"stay" },
+      { id:"d1a4", name:"Ramen dinner — Ichiran or Fuunji", type:"eat", note:"Try tsukemen in Shinjuku" },
+      { id:"d1a5", name:"Evening stroll — Shinjuku Kabukicho", type:"see" },
+    ]
+  },
+  {
+    day: 2, title: "Shinjuku + Harajuku", city: "Tokyo",
+    activities: [
+      { id:"d2a1", name:"Meiji Jingu Shrine (open at sunrise)", type:"see", note:"Quiet before the crowds" },
+      { id:"d2a2", name:"Takeshita Street — Harajuku", type:"see" },
+      { id:"d2a3", name:"Omotesando Hills — architecture + coffee", type:"do" },
+      { id:"d2a4", name:"Gyukatsu Motomura for lunch", type:"eat", note:"Beef cutlet — queue early" },
+      { id:"d2a5", name:"Shinjuku Gyoen garden", type:"see" },
+      { id:"d2a6", name:"Tokyo Metropolitan Govt Building (free view)", type:"see", note:"Best at dusk" },
+    ]
+  },
+  {
+    day: 3, title: "Shibuya + Asakusa", city: "Tokyo",
+    activities: [
+      { id:"d3a1", name:"Shibuya Sky observation deck", type:"see", note:"Book in advance — ¥2,000" },
+      { id:"d3a2", name:"Scramble Crossing photo", type:"do" },
+      { id:"d3a3", name:"Tsukiji Outer Market lunch", type:"eat", note:"Fresh sushi & tamagoyaki" },
+      { id:"d3a4", name:"Senso-ji Temple — Asakusa", type:"see" },
+      { id:"d3a5", name:"Nakamise Shopping Street", type:"do" },
+      { id:"d3a6", name:"Tokyo Skytree (optional)", type:"see", note:"Skip if budget-conscious" },
+    ]
+  },
+  {
+    day: 4, title: "Akihabara + Ueno", city: "Tokyo",
+    activities: [
+      { id:"d4a1", name:"Ueno Park & Tokyo National Museum", type:"see", note:"¥1,000 entry" },
+      { id:"d4a2", name:"Ameyoko Market street food", type:"eat" },
+      { id:"d4a3", name:"Akihabara — electronics & anime", type:"do" },
+      { id:"d4a4", name:"Yodobashi Camera for gadgets", type:"do", note:"Tax-free shopping" },
+      { id:"d4a5", name:"Yakiniku dinner — Don Quijote area", type:"eat" },
+    ]
+  },
+  {
+    day: 5, title: "Day Trip — Nikko", city: "Nikko",
+    activities: [
+      { id:"d5a1", name:"Shinkansen / Limited Express to Nikko", type:"travel", note:"~2hrs from Shinjuku" },
+      { id:"d5a2", name:"Toshogu Shrine complex", type:"see", note:"See the 3 wise monkeys carving" },
+      { id:"d5a3", name:"Kegon Waterfall", type:"see" },
+      { id:"d5a4", name:"Lunch — yuba (tofu skin) cuisine", type:"eat", note:"Nikko specialty" },
+      { id:"d5a5", name:"Return to Tokyo — evening", type:"travel" },
+    ]
+  },
+  {
+    day: 6, title: "Shinkansen to Kyoto", city: "Kyoto",
+    activities: [
+      { id:"d6a1", name:"Board Nozomi Shinkansen (Tokyo → Kyoto)", type:"travel", note:"~2h 15min" },
+      { id:"d6a2", name:"Check in — Kyoto ryokan", type:"stay", note:"Request yukata & onsen room" },
+      { id:"d6a3", name:"Nishiki Market — The Kitchen of Kyoto", type:"eat" },
+      { id:"d6a4", name:"Gion district evening walk", type:"see", note:"Spot geisha in Hanamikoji" },
+      { id:"d6a5", name:"Kaiseki dinner — Gion Nanba (book ahead)", type:"eat" },
+    ]
+  },
+  {
+    day: 7, title: "Arashiyama + Fushimi Inari", city: "Kyoto",
+    activities: [
+      { id:"d7a1", name:"Arashiyama Bamboo Grove at 6am", type:"see", note:"Empty before 8am!" },
+      { id:"d7a2", name:"Tenryu-ji Zen Garden", type:"see", note:"¥500" },
+      { id:"d7a3", name:"Saga-Toriimoto preserved street", type:"see" },
+      { id:"d7a4", name:"Tofu kaiseki lunch in Arashiyama", type:"eat" },
+      { id:"d7a5", name:"Fushimi Inari Taisha — 1000 torii gates", type:"see", note:"Hike the full trail for views" },
+      { id:"d7a6", name:"Izakaya dinner near Kyoto Station", type:"eat" },
+    ]
+  },
+  {
+    day: 8, title: "Nara Day Trip + Osaka", city: "Nara / Osaka",
+    activities: [
+      { id:"d8a1", name:"Train Kyoto → Nara (40 min)", type:"travel" },
+      { id:"d8a2", name:"Feed the sacred deer in Nara Park", type:"do", note:"Buy shika sembei deer crackers" },
+      { id:"d8a3", name:"Todai-ji Giant Buddha Hall", type:"see", note:"World's largest wooden building" },
+      { id:"d8a4", name:"Train Nara → Osaka (1 hr)", type:"travel" },
+      { id:"d8a5", name:"Dotonbori — Osaka's neon strip", type:"see" },
+      { id:"d8a6", name:"Takoyaki & okonomiyaki street food", type:"eat", note:"The real deal in Osaka" },
+    ]
+  },
+  {
+    day: 9, title: "Osaka — Umeda + Kuromon", city: "Osaka",
+    activities: [
+      { id:"d9a1", name:"Kuromon Ichiba Market breakfast", type:"eat", note:"Buy & eat fresh seafood" },
+      { id:"d9a2", name:"Osaka Castle & park", type:"see", note:"¥600 entry" },
+      { id:"d9a3", name:"Umeda Sky Building Floating Garden", type:"see" },
+      { id:"d9a4", name:"Shinsaibashi shopping street", type:"do" },
+      { id:"d9a5", name:"All-you-can-eat yakiniku — Hozenji Yokocho", type:"eat" },
+      { id:"d9a6", name:"Don Quijote Dotonbori (gifts)", type:"do", note:"Stock up on snacks & souvenirs" },
+    ]
+  },
+  {
+    day: 10, title: "Departure Day", city: "Osaka / KIX",
+    activities: [
+      { id:"d10a1", name:"Final konbini breakfast — 7-Eleven or Lawson", type:"eat", note:"Onigiri, melon pan 🥹" },
+      { id:"d10a2", name:"Last-minute Shinsaibashi run", type:"do" },
+      { id:"d10a3", name:"Haruka Express → Kansai Airport", type:"travel", note:"~75 min, book seat" },
+      { id:"d10a4", name:"Check in & duty free shopping", type:"do", note:"Buy Kit-Kat flavours & snacks" },
+      { id:"d10a5", name:"Board flight — さようなら Japan 🇯🇵", type:"travel" },
+    ]
+  },
+];
+
+const PACKING = [
+  {
+    cat: "Documents", icon: "📄",
+    items: [
+      { id:"p1", name:"Passport", essential: true },
+      { id:"p2", name:"Travel Insurance docs", essential: true },
+      { id:"p3", name:"JR Pass (collect at airport)", essential: true },
+      { id:"p4", name:"Hotel confirmations (printed)", essential: false },
+      { id:"p5", name:"Emergency contact card", essential: true },
+    ]
+  },
+  {
+    cat: "Tech & Money", icon: "💳",
+    items: [
+      { id:"p6", name:"Unlocked smartphone", essential: true },
+      { id:"p7", name:"Japan SIM card (pre-order online)", essential: true },
+      { id:"p8", name:"Power bank — 20,000mAh", essential: true },
+      { id:"p9", name:"Type A travel adaptor", essential: true },
+      { id:"p10", name:"Portable wifi (optional if SIM)", essential: false },
+      { id:"p11", name:"¥100,000 cash (JPY)", essential: true, note:"Many places cash only" },
+      { id:"p12", name:"IC card (Suica / Pasmo)", essential: true },
+    ]
+  },
+  {
+    cat: "Clothing", icon: "👘",
+    items: [
+      { id:"p13", name:"Comfortable walking shoes", essential: true },
+      { id:"p14", name:"Slip-on shoes (for temples)", essential: true },
+      { id:"p15", name:"Light rain jacket / umbrella", essential: true },
+      { id:"p16", name:"Smart-casual outfit (restaurants)", essential: false },
+      { id:"p17", name:"7 days casual clothing", essential: true },
+    ]
+  },
+  {
+    cat: "Health & Comfort", icon: "💊",
+    items: [
+      { id:"p18", name:"Prescription medications (+ extra)", essential: true },
+      { id:"p19", name:"Blister plasters — lots!", essential: true },
+      { id:"p20", name:"Sunscreen SPF 50+", essential: true },
+      { id:"p21", name:"Hand sanitiser", essential: false },
+      { id:"p22", name:"Activated charcoal (food illness)", essential: false },
+    ]
+  },
+  {
+    cat: "Japan Essentials", icon: "⛩",
+    items: [
+      { id:"p23", name:"Pocket WiFi / SIM confirmed", essential: true },
+      { id:"p24", name:"Google Translate (offline Japanese)", essential: true },
+      { id:"p25", name:"Google Maps (offline Tokyo + Osaka)", essential: true },
+      { id:"p26", name:"Hyperdia or Navitime app installed", essential: true },
+      { id:"p27", name:"Small day-bag / tote for outings", essential: false },
+    ]
+  }
+];
+
+const TIPS = [
+  { id:"t1", name:"Remove shoes at ryokan & some restaurants" },
+  { id:"t2", name:"Don't eat while walking — find a spot to sit" },
+  { id:"t3", name:"Speak quietly on trains & no phone calls" },
+  { id:"t4", name:"Carry cash — many ramen shops are cash only" },
+  { id:"t5", name:"Queue properly — Japanese queuing is an art" },
+  { id:"t6", name:"IC card (Suica) works on most transit & konbinis" },
+  { id:"t7", name:"Book popular restaurants at least 2 weeks ahead" },
+  { id:"t8", name:"Trash bins are rare — carry a small bag" },
+  { id:"t9", name:"Convenience stores (konbini) are gold — use them" },
+  { id:"t10", name:"Point at menus & use Google Translate camera" },
+];
+
+const PHRASES = [
+  { id:"ph1", name:"ありがとう ございます — Arigatou gozaimasu (Thank you very much)" },
+  { id:"ph2", name:"すみません — Sumimasen (Excuse me / Sorry)" },
+  { id:"ph3", name:"いくら ですか — Ikura desu ka (How much is this?)" },
+  { id:"ph4", name:"〜 は どこ ですか — … wa doko desu ka (Where is …?)" },
+  { id:"ph5", name:"トイレ は どこ ですか — Toilet wa doko desu ka (Where is the toilet?)" },
+  { id:"ph6", name:"えいご は はなせます か — Eigo wa hanasemasu ka (Do you speak English?)" },
+  { id:"ph7", name:"おすすめ は なに ですか — Osusume wa nani desu ka (What do you recommend?)" },
+  { id:"ph8", name:"ひとつ ください — Hitotsu kudasai (One please)" },
+  { id:"ph9", name:"ハラール — Harāru (Halal — useful when ordering!)" },
+  { id:"ph10", name:"おいしい！ — Oishii! (Delicious!)" },
+];
+
+// ── STATE & STORAGE ───────────────────────────────────────────────────────
+
+const KEY = 'japan_planner_v1';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+  catch { return {}; }
+}
+function saveState(s) {
+  localStorage.setItem(KEY, JSON.stringify(s));
+}
+
+let state = loadState();
+if (!state.checked)  state.checked  = {};
+if (!state.packed)   state.packed   = {};
+if (!state.openDays) state.openDays = {};
+if (!state.notes)    state.notes    = '';
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+
+function buildItinerary() {
+  const container = document.getElementById('days-container');
+  container.innerHTML = '';
+
+  ITINERARY.forEach(day => {
+    const allIds = day.activities.map(a => a.id);
+    const doneCount = allIds.filter(id => state.checked[id]).length;
+    const isOpen = !!state.openDays[day.day];
+    const isComplete = doneCount === allIds.length;
+
+    const el = document.createElement('div');
+    el.className = `day${isOpen ? ' open' : ''}${isComplete ? ' completed' : ''}`;
+    el.id = `day-${day.day}`;
+
+    el.innerHTML = `
+      <div class="day-header" data-day="${day.day}">
+        <div class="day-num">${day.day}<span>day</span></div>
+        <div class="day-info">
+          <div class="day-title">${day.title}</div>
+          <div class="day-city">
+            <div class="city-dot"></div>
+            ${day.city} &nbsp;·&nbsp; ${doneCount}/${allIds.length} done
+          </div>
+        </div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="day-divider"></div>
+        <div class="activities">
+          ${day.activities.map(a => `
+            <div class="activity${state.checked[a.id] ? ' done' : ''}" data-id="${a.id}">
+              <div class="activity-check">${state.checked[a.id] ? '✓' : ''}</div>
+              <div class="activity-content">
+                <div class="activity-name">${a.name}</div>
+                <div class="activity-meta">
+                  <span class="activity-tag type-${a.type}">${a.type}</span>
+                </div>
+                ${a.note ? `<div class="activity-note">💡 ${a.note}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+  });
+
+  // Event delegation
+  container.addEventListener('click', e => {
+    const header = e.target.closest('[data-day]');
+    const activity = e.target.closest('[data-id]');
+
+    if (header) {
+      const dayNum = parseInt(header.dataset.day);
+      state.openDays[dayNum] = !state.openDays[dayNum];
+      saveState(state);
+      buildItinerary();
+      updateProgress();
+    } else if (activity) {
+      const id = activity.dataset.id;
+      state.checked[id] = !state.checked[id];
+      saveState(state);
+      const wasDone = activity.classList.contains('done');
+      activity.classList.toggle('done', !wasDone);
+      activity.querySelector('.activity-check').textContent = !wasDone ? '✓' : '';
+
+      // Update day header count
+      const dayEl = activity.closest('.day');
+      if (dayEl) {
+        const dayId = parseInt(dayEl.id.replace('day-',''));
+        const dayData = ITINERARY.find(d => d.day === dayId);
+        if (dayData) {
+          const doneCount = dayData.activities.filter(a => state.checked[a.id]).length;
+          dayEl.querySelector('.day-city').innerHTML = `<div class="city-dot"></div>${dayData.city} &nbsp;·&nbsp; ${doneCount}/${dayData.activities.length} done`;
+          const allDone = doneCount === dayData.activities.length;
+          dayEl.classList.toggle('completed', allDone);
+          if (allDone) spawnPetals();
+        }
+      }
+      updateProgress();
+    }
+  });
+}
+
+function buildPacking() {
+  const container = document.getElementById('pack-container');
+  container.innerHTML = '';
+
+  PACKING.forEach(cat => {
+    const section = document.createElement('div');
+    section.className = 'pack-category';
+
+    const doneCount = cat.items.filter(i => state.packed[i.id]).length;
+    section.innerHTML = `
+      <div class="pack-cat-label">
+        <span class="cat-icon">${cat.icon}</span>
+        ${cat.cat} &nbsp;(${doneCount}/${cat.items.length})
+      </div>
+      <div class="pack-items">
+        ${cat.items.map(item => `
+          <div class="pack-item${state.packed[item.id] ? ' packed' : ''}" data-pack-id="${item.id}">
+            <div class="pack-check">${state.packed[item.id] ? '✓' : ''}</div>
+            <div class="pack-item-name">${item.name}</div>
+            <span class="pack-item-badge ${item.essential ? 'badge-essential' : 'badge-optional'}">
+              ${item.essential ? 'must' : 'opt'}
+            </span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+
+  container.addEventListener('click', e => {
+    const item = e.target.closest('[data-pack-id]');
+    if (!item) return;
+    const id = item.dataset.packId;
+    state.packed[id] = !state.packed[id];
+    saveState(state);
+    const wasPacked = item.classList.contains('packed');
+    item.classList.toggle('packed', !wasPacked);
+    item.querySelector('.pack-check').textContent = !wasPacked ? '✓' : '';
+
+    // Update category count
+    const catDiv = item.closest('.pack-category');
+    if (catDiv) {
+      const catData = PACKING.find(c => c.items.some(i => i.id === id));
+      if (catData) {
+        const doneCount = catData.items.filter(i => state.packed[i.id]).length;
+        catDiv.querySelector('.pack-cat-label').innerHTML = `<span class="cat-icon">${catData.icon}</span>${catData.cat} &nbsp;(${doneCount}/${catData.items.length})`;
+      }
+    }
+  });
+}
+
+function buildTips() {
+  const container = document.getElementById('tips-container');
+  container.innerHTML = `<div class="pack-items">${TIPS.map(t => `
+    <div class="pack-item" style="cursor:default">
+      <span style="font-size:14px">⛩</span>
+      <div class="pack-item-name" style="font-size:12px">${t.name}</div>
+    </div>
+  `).join('')}</div>`;
+}
+
+function buildPhrases() {
+  const container = document.getElementById('phrases-list');
+  container.innerHTML = PHRASES.map(p => `
+    <div class="pack-item" style="cursor:default">
+      <span style="font-size:14px">🗣</span>
+      <div class="pack-item-name" style="font-size:12px; font-family: 'Shippori Mincho', serif">${p.name}</div>
+    </div>
+  `).join('');
+}
+
+function buildNotes() {
+  const ta = document.getElementById('notes-input');
+  ta.value = state.notes || '';
+  ta.addEventListener('input', () => {
+    state.notes = ta.value;
+    saveState(state);
+  });
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────
+
+function updateProgress() {
+  const allActivities = ITINERARY.flatMap(d => d.activities);
+  const total = allActivities.length;
+  const done  = allActivities.filter(a => state.checked[a.id]).length;
+  const pct   = total ? Math.round((done / total) * 100) : 0;
+
+  const circ = 2 * Math.PI * 30; // r=30
+  const offset = circ - (pct / 100) * circ;
+  document.getElementById('ring-fill').setAttribute('stroke-dashoffset', offset);
+  document.getElementById('ring-pct-val').textContent = pct;
+
+  const titles = [
+    "Your journey awaits 🌸",
+    "You've started — great! 🍜",
+    "Quarter done — keep going 🚄",
+    "Halfway through Japan 🗾",
+    "Almost there — amazing! ⛩",
+    "Japan — completed! 🎌"
+  ];
+  const subTexts = [
+    "Tap activities to mark them complete as you go.",
+    "Exploring Japan one experience at a time.",
+    "The food, the shrines, the neon — soaking it in.",
+    "Memories being made every step of the way.",
+    "You've seen so much — finish strong!",
+    "What a trip. Arigatou gozaimashita! 🙏"
+  ];
+  const idx = Math.min(Math.floor(pct / 20), 5);
+  document.getElementById('progress-title').textContent = titles[idx];
+  document.getElementById('progress-sub').textContent   = subTexts[idx];
+
+  // Mini bars per day
+  const bars = document.getElementById('mini-bars');
+  bars.innerHTML = ITINERARY.map(d => {
+    const acts = d.activities;
+    const doneActs = acts.filter(a => state.checked[a.id]).length;
+    const cls = doneActs === acts.length ? 'done' : doneActs > 0 ? 'partial' : '';
+    return `<div class="mini-bar ${cls}" title="Day ${d.day}"></div>`;
+  }).join('');
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(`view-${tab.dataset.view}`).classList.add('active');
+  });
+});
+
+// ── RESET ────────────────────────────────────────────────────────────────
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    state = { checked:{}, packed:{}, openDays:{}, notes: state.notes };
+    saveState(state);
+    buildItinerary();
+    buildPacking();
+    updateProgress();
+    showToast('Progress reset 🔄');
+  }
+});
+
+// ── PETALS ───────────────────────────────────────────────────────────────
+
+function spawnPetals() {
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = ['🌸','🌺','✿'][Math.floor(Math.random()*3)];
+      p.style.left  = Math.random() * 100 + 'vw';
+      p.style.top   = '-20px';
+      p.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+      p.style.animationDelay = (Math.random() * 0.8) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 5000);
+    }, i * 100);
+  }
+}
+
+document.getElementById('petal-btn').addEventListener('click', spawnPetals);
+
+// ── TOAST ────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── ONLINE/OFFLINE ────────────────────────────────────────────────────────
+
+window.addEventListener('online',  () => { document.body.classList.remove('offline');  showToast('Back online ✓'); });
+window.addEventListener('offline', () => { document.body.classList.add('offline');     showToast('Offline mode — data saved locally'); });
+
+// ── PWA / SERVICE WORKER ──────────────────────────────────────────────────
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    console.log('SW registered', reg.scope);
+  }).catch(console.error);
+}
+
+// Inline manifest via blob
+const manifestData = {
+  name: "Japan Elite Planner",
+  short_name: "Japan 🇯🇵",
+  description: "Offline-first Japan travel itinerary & packing planner",
+  start_url: "./japan-planner.html",
+  display: "standalone",
+  background_color: "#050810",
+  theme_color: "#050810",
+  orientation: "portrait",
+  icons: [
+    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%23050810'/%3E%3Ccircle cx='96' cy='96' r='55' fill='%23c8372d'/%3E%3C/svg%3E", sizes: "192x192", type: "image/svg+xml" }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type:'application/json'});
+const manifestURL = URL.createObjectURL(blob);
+const link = document.createElement('link');
+link.rel = 'manifest'; link.href = manifestURL;
+document.head.appendChild(link);
+
+// PWA Install prompt
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').classList.add('visible');
+});
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('install-banner').classList.remove('visible');
+    showToast('App installed! 🎌');
+  }
+  deferredPrompt = null;
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').classList.remove('visible');
+  showToast('Welcome to Japan Planner 🌸');
+});
+
+// ── SPLASH ────────────────────────────────────────────────────────────────
+
+window.addEventListener('load', () => {
+  buildItinerary();
+  buildPacking();
+  buildTips();
+  buildPhrases();
+  buildNotes();
+  updateProgress();
+
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hidden');
+  }, 1800);
+});
+</script>
+
+</body>
+</html>
