@@ -43,6 +43,16 @@ body {
   display: flex;
   flex-direction: column;
 }
+/* =========================================================
+   VIEWS — SHOW ONE AT A TIME
+   ========================================================= */
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
 
 /* =========================================================
    APP WRAPPER
