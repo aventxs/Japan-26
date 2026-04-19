@@ -816,6 +816,48 @@ body {
 }
 
 /* =========================================================
+   BUDGET INPUT FIXES
+   ========================================================= */
+
+#budget-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.budget-input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+#budget-desc,
+#budget-amt {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-size: 14px;
+}
+
+#budget-amt {
+  max-width: 120px;
+}
+
+#budget-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: white;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* =========================================================
    INFO GRID
    ========================================================= */
 .info-grid {
@@ -899,6 +941,13 @@ body {
   font-size: 12px;
   color: var(--mist);
 }
+
+.phrase-romaji {
+  font-size: 13px;
+  color: var(--mist);
+  margin-top: 2px;
+}
+
 /* =========================================================
    NOTES
    ========================================================= */
