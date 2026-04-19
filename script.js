@@ -14,136 +14,165 @@ const TRIP_END   = new Date("2026-05-20");   // Departure
 const ITINERARY = [
   {
     day: 1,
+    date: "2026-05-09",
     title: "Arrival in Tokyo",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { name: "Arrive at Haneda Airport", tags: ["fun"], note: "Welcome to Japan!" },
-      { name: "Check-in at hotel (Akasaka)", tags: ["shop"] },
-      { name: "Explore Akasaka area", tags: ["walk"] },
-      { name: "Dinner (Halal-friendly options nearby)", tags: ["hala","food"] }
-    ]
-  },
-  {
-    day: 2,
-    title: "Shibuya & Harajuku",
-    city: "Tokyo",
-    walk: 3,
-    items: [
-      { name: "Shibuya Crossing", tags: ["fun","walk"] },
-      { name: "Hachiko Statue", tags: ["fun"] },
-      { name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
-      { name: "Meiji Shrine", tags: ["walk"] }
-    ]
-  },
-  {
-    day: 3,
-    title: "Shinjuku Day",
-    city: "Tokyo",
-    walk: 3,
-    items: [
-      { name: "Tokyo Metropolitan Gov. Building", tags: ["fun"] },
-      { name: "Shinjuku Gyoen Park", tags: ["walk"] },
-      { name: "Kabukicho exploration", tags: ["fun"] }
-    ]
-  },
-  {
-    day: 4,
-    title: "Akihabara & Ueno",
-    city: "Tokyo",
-    walk: 3,
-    items: [
-      { name: "Akihabara Electric Town", tags: ["shop","fun"] },
-      { name: "Ueno Park", tags: ["walk"] },
-      { name: "Ameyoko Market", tags: ["shop"] }
-    ]
-  },
-  {
-    day: 5,
-    title: "Asakusa & Skytree",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { name: "Senso-ji Temple", tags: ["walk"] },
-      { name: "Nakamise Street", tags: ["shop"] },
-      { name: "Tokyo Skytree", tags: ["fun"] }
-    ]
-  },
-  {
-    day: 6,
-    title: "Odaiba Day",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { name: "TeamLab Planets", tags: ["fun"] },
-      { name: "DiverCity Gundam", tags: ["fun"] },
-      { name: "Odaiba Seaside Park", tags: ["walk"] }
-    ]
-  },
-  {
-    day: 7,
-    title: "Mario Kart Street Tour",
     city: "Tokyo",
     walk: 1,
     items: [
-      { name: "Mario Kart Driving Experience", tags: ["fun"], note: "License required" },
-      { name: "Explore Roppongi", tags: ["walk"] }
+      { time: "18:30", name: "Arrive at Haneda Airport (HND)", tags: ["travel"] },
+      { time: "20:00", name: "Check-in at hotel (Akasaka)", tags: ["travel"] },
+      { time: "21:00", name: "Shibuya Crossing & short night walk", tags: ["fun","walk"] },
+      { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
     ]
   },
+
   {
-    day: 8,
-    title: "Travel to Osaka",
-    city: "Osaka",
+    day: 2,
+    date: "2026-05-10",
+    title: "Shibuya • Harajuku • Mario Kart • Shibuya Sky",
+    city: "Tokyo",
     walk: 2,
     items: [
-      { name: "Shinkansen to Osaka", tags: ["fun"] },
-      { name: "Check-in at hotel", tags: ["shop"] },
-      { name: "Dotonbori Night Walk", tags: ["walk","food"] }
+      { time: "10:30", name: "Shibuya 109 (fashion)", tags: ["shop"] },
+      { time: "11:30", name: "LOFT / lifestyle stores", tags: ["shop"] },
+      { time: "12:00", name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
+      { time: "13:00", name: "Mario Kart Street Tour (Afternoon slot)", tags: ["fun","experience"] },
+      { time: "15:00", name: "Break / explore Shibuya", tags: ["rest"] },
+      { time: "17:30", name: "Shibuya Sky (sunset → night)", tags: ["view","fun"] },
+      { time: "19:30", name: "Gyumon Halal Yakiniku (Dinner)", tags: ["food","halal"] }
     ]
   },
+
   {
-    day: 9,
-    title: "Universal Studios Japan",
-    city: "Osaka",
-    walk: 3,
+    day: 3,
+    date: "2026-05-11",
+    title: "Ikebukuro + Harry Potter Studio Tour",
+    city: "Tokyo",
+    walk: 2,
     items: [
-      { name: "Super Nintendo World", tags: ["fun"] },
-      { name: "Harry Potter World", tags: ["fun"] },
-      { name: "USJ Attractions", tags: ["fun","walk"] }
+      { time: "10:00", name: "Ikebukuro – Animate & anime shops", tags: ["shop","fun"] },
+      { time: "12:00", name: "Travel to Harry Potter Studio Tour", tags: ["travel"] },
+      { time: "13:00", name: "Harry Potter Studio Tour Tokyo", tags: ["fun","experience"] }
     ]
   },
+
   {
-    day: 10,
-    title: "Kyoto Day Trip",
+    day: 4,
+    date: "2026-05-12",
+    title: "Shinjuku + Drift Tour",
+    city: "Tokyo",
+    walk: 2,
+    items: [
+      { time: "11:00", name: "Shinjuku exploring (Kabukicho, tech stores)", tags: ["shop","fun"] },
+      { time: "15:00", name: "Rest at hotel", tags: ["rest"] },
+      { time: "18:00", name: "Tokyo Drift / Go-Kart Experience", tags: ["fun","experience"] }
+    ]
+  },
+
+  {
+    day: 5,
+    date: "2026-05-13",
+    title: "Tokyo → Kyoto + Fushimi Inari (gentle route)",
+    city: "Kyoto",
+    walk: 2,
+    items: [
+      { time: "09:00", name: "Shinkansen to Kyoto", tags: ["travel"] },
+      { time: "12:00", name: "Hotel check-in / luggage drop", tags: ["travel"] },
+      { time: "14:00", name: "Fushimi Inari (first section only)", tags: ["walk","view"] }
+    ]
+  },
+
+  {
+    day: 6,
+    date: "2026-05-14",
+    title: "Kiyomizu-dera → Sannenzaka → Gion",
     city: "Kyoto",
     walk: 3,
     items: [
-      { name: "Fushimi Inari Shrine", tags: ["walk"] },
-      { name: "Kiyomizu-dera", tags: ["walk"] },
-      { name: "Gion District", tags: ["walk","shop"] }
+      { time: "10:30", name: "Taxi to Kiyomizu-dera", tags: ["travel"] },
+      { time: "11:00", name: "Kiyomizu-dera Temple", tags: ["walk","view"] },
+      { time: "12:30", name: "Downhill Sannenzaka / Ninenzaka", tags: ["walk","shop"] },
+      { time: "17:00", name: "Gion District evening walk", tags: ["walk","view"] }
     ]
   },
+
   {
-    day: 11,
-    title: "Nara Day Trip",
-    city: "Nara",
+    day: 7,
+    date: "2026-05-15",
+    title: "Arashiyama + teamLab Biovortex",
+    city: "Kyoto",
     walk: 2,
     items: [
-      { name: "Nara Deer Park", tags: ["fun","walk"] },
-      { name: "Todaiji Temple", tags: ["walk"] }
+      { time: "09:00", name: "Arashiyama Bamboo Grove (flat path)", tags: ["walk","view"] },
+      { time: "11:00", name: "River cafés (relax)", tags: ["rest","food"] },
+      { time: "18:00", name: "teamLab Biovortex Kyoto", tags: ["fun","experience"] }
     ]
   },
+
+  {
+    day: 8,
+    date: "2026-05-16",
+    title: "Kyoto → Osaka + Namba + Dotonbori",
+    city: "Osaka",
+    walk: 2,
+    items: [
+      { time: "10:00", name: "Train to Osaka", tags: ["travel"] },
+      { time: "12:00", name: "Hotel check-in (Namba area)", tags: ["travel"] },
+      { time: "14:00", name: "Namba Yasaka Shrine", tags: ["view"] },
+      { time: "18:00", name: "Dotonbori night walk", tags: ["walk","food","fun"] }
+    ]
+  },
+
+  {
+    day: 9,
+    date: "2026-05-17",
+    title: "Osaka Castle + Umeda Sky",
+    city: "Osaka",
+    walk: 2,
+    items: [
+      { time: "09:00", name: "Osaka Castle (elevator route)", tags: ["view","walk"] },
+      { time: "15:00", name: "Rest / café break", tags: ["rest"] },
+      { time: "18:00", name: "Umeda Sky Building (sunset)", tags: ["view","fun"] }
+    ]
+  },
+
+  {
+    day: 10,
+    date: "2026-05-18",
+    title: "Shinsaibashi + Rinku Premium Outlets",
+    city: "Osaka",
+    walk: 2,
+    items: [
+      { time: "11:00", name: "Shinsaibashi Shopping Street", tags: ["shop"] },
+      { time: "15:00", name: "Rinku Premium Outlets (near KIX)", tags: ["shop","food"] }
+    ]
+  },
+
+  {
+    day: 11,
+    date: "2026-05-19",
+    title: "Chill Day + Packing",
+    city: "Osaka",
+    walk: 1,
+    items: [
+      { time: "10:00", name: "Free time (arcades, cafés, shopping)", tags: ["fun","rest"] },
+      { time: "18:00", name: "Packing + early night", tags: ["rest"] }
+    ]
+  },
+
   {
     day: 12,
+    date: "2026-05-20",
     title: "Departure from KIX",
     city: "Osaka",
     walk: 1,
     items: [
-      { name: "Last-minute shopping", tags: ["shop"] },
-      { name: "Travel to Kansai Airport (KIX)", tags: ["fun"] }
+      { time: "07:00", name: "Travel to Kansai Airport (KIX)", tags: ["travel"] },
+      { time: "09:30", name: "Flight departure", tags: ["travel"] }
     ]
   }
 ];
+
 /* =========================================================
    STATE
    ========================================================= */
@@ -356,18 +385,27 @@ function renderRoute() {
   const wrap = document.getElementById("route-bar");
   wrap.innerHTML = "";
 
-  ITINERARY.forEach((day, i) => {
+  // Extract unique cities in order
+  const cities = [];
+  ITINERARY.forEach(day => {
+    if (!cities.includes(day.city)) {
+      cities.push(day.city);
+    }
+  });
+
+  // Render unique route
+  cities.forEach((cityName, i) => {
     const city = document.createElement("div");
     city.className = "route-city";
 
     city.innerHTML = `
       <div class="rc-dot"></div>
-      <div class="rc-name">${day.city}</div>
+      <div class="rc-name">${cityName}</div>
     `;
 
     wrap.appendChild(city);
 
-    if (i < ITINERARY.length - 1) {
+    if (i < cities.length - 1) {
       const line = document.createElement("div");
       line.className = "route-line";
       wrap.appendChild(line);
