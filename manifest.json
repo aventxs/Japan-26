@@ -1,8 +1,8 @@
 
-  "name": "Japan Elite Planner",
+  "name": "Japan Planner",
   "short_name": "Japan ✈",
   "description": "Offline-first Japan travel itinerary, packing, budget & phrasebook",
-  "start_url": "./index.html",
+  "start_url": "./japan-itinerary.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
