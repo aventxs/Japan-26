@@ -48,7 +48,7 @@ caches.open(CACHE).then(c => c.put(e.request, clone));
 return res;
 })
 )
-.catch(() => caches.match(’./index.html’))
+.catch(() => caches.match(’./japan-itinerary.html’))
 );
 }
 });
