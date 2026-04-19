@@ -1,6 +1,6 @@
 const CACHE = ‘japan-planner-v3’;
 const ASSETS = [
-‘./japan-itinerary.html’,
+‘./index.html’,
 ‘./manifest.json’,
 ‘./icon-192.svg’,
 ‘./icon-512.svg’
@@ -48,7 +48,7 @@ caches.open(CACHE).then(c => c.put(e.request, clone));
 return res;
 })
 )
-.catch(() => caches.match(’./japan-itinerary.html’))
+.catch(() => caches.match(’./index.html’))
 );
 }
 });
