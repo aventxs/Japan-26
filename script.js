@@ -648,12 +648,13 @@ function renderTips() {
    PHRASES
    ========================================================= */
 const PHRASES = [
-  { jp: "ありがとうございます", en: "Thank you" },
-  { jp: "すみません", en: "Excuse me / Sorry" },
-  { jp: "お願いします", en: "Please" },
-  { jp: "英語を話せますか？", en: "Do you speak English?" },
-  { jp: "どこですか？", en: "Where is it?" }
+  { jp: "ありがとうございます", romaji: "Arigatou gozaimasu", en: "Thank you" },
+  { jp: "すみません", romaji: "Sumimasen", en: "Excuse me / Sorry" },
+  { jp: "お願いします", romaji: "Onegaishimasu", en: "Please" },
+  { jp: "英語を話せますか？", romaji: "Eigo o hanasemasu ka?", en: "Do you speak English?" },
+  { jp: "どこですか？", romaji: "Doko desu ka?", en: "Where is it?" }
 ];
+
 
 function renderPhrases() {
   const wrap = document.getElementById("phrases-container");
@@ -663,10 +664,12 @@ function renderPhrases() {
     const row = document.createElement("div");
     row.className = "phrase";
 
-    row.innerHTML = `
+        row.innerHTML = `
       <div class="phrase-jp">${p.jp}</div>
+      <div class="phrase-romaji">${p.romaji}</div>
       <div class="phrase-en">${p.en}</div>
     `;
+
 
     row.addEventListener("click", () => {
       navigator.clipboard.writeText(p.jp);
