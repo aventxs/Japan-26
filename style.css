@@ -757,29 +757,39 @@ body {
 
 .budget-add {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+}
+
+.budget-input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
 }
 
 .budget-input {
   flex: 1;
   padding: 10px;
-  background: var(--card);
+  border-radius: 8px;
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  color: #fff;
+  background: var(--card);
   font-size: 14px;
 }
 
-.budget-add-btn {
-  background: var(--gold);
-  border: none;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  color: #000;
-  cursor: pointer;
+#budget-amt {
+  max-width: 100px;
 }
+
+.budget-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: white;
+  border-radius: 10px;
+  font-size: 15px;
+  text-align: center;
+}
+
 
 .budget-entries {
   display: flex;
