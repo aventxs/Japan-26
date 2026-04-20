@@ -546,7 +546,8 @@ body.offline #offbadge { display: block; }
   opacity: 0.9;
   pointer-events: none;
   animation: fall linear forwards;
-  z-index: 9999; /* ← REQUIRED */
+  z-index: 2147483647; /* ← REQUIRED */
+  transform: translateZ(0);
 }
 
 @keyframes fall {
