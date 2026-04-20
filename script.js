@@ -296,8 +296,9 @@ function renderDays() {
       act.innerHTML = `
         <div class="act-chk">${done ? "✓" : ""}</div>
         <div class="act-body">
-          <div class="act-name">${item.name}</div>
-          <div class="act-tags">${tagsHtml}</div>
+        <div class="act-time">${item.time}</div>
+        <div class="act-name">${item.name}</div>
+        <div class="act-tags">${tagsHtml}</div>
         </div>
       `;
 
