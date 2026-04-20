@@ -448,6 +448,8 @@ body.offline #offbadge { display: block; }
   background: var(--card); padding: 11px 12px;
   border-radius: 10px; border: 1px solid var(--line);
 }
+.budget-entry-gbp {font-size: 11px; color: var(--mist); margin-top: 2px;
+}
 .budget-entry-left { display: flex; align-items: center; gap: 8px; }
 .budget-entry-ico { font-size: 16px; }
 .budget-entry-desc { font-size: 13px; color: var(--snow); }
