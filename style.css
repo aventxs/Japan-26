@@ -448,16 +448,25 @@ body.offline #offbadge { display: block; }
   background: var(--card); padding: 11px 12px;
   border-radius: 10px; border: 1px solid var(--line);
 }
-.budget-entry-gbp {font-size: 11px; color: var(--mist); margin-top: 2px;
-}
 .budget-entry-left { display: flex; align-items: center; gap: 8px; }
 .budget-entry-ico { font-size: 16px; }
 .budget-entry-desc { font-size: 13px; color: var(--snow); }
 .budget-entry-cat { font-size: 10px; color: var(--mist); }
-.budget-entry-right { display: flex; align-items: center; gap: 8px; }
 .budget-entry-amt { font-size: 14px; font-weight: 600; color: var(--snow); font-family: var(--jp); }
+.budget-entry-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-entry-gbp {
+  font-size: 11px;
+  color: var(--mist);
+  margin-top: 2px;
+}
+
 .budget-del {
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
   color: var(--fog);
   padding: 4px 6px;
@@ -472,7 +481,6 @@ body.offline #offbadge { display: block; }
 
 .budget-del:active {
   transform: scale(0.85);
-}
 }
 
 /* ── INFO GRID ── */
