@@ -570,11 +570,24 @@ function renderBudgetEntries() {
         <div class="budget-entry-desc">${entry.desc}</div>
         <div class="budget-entry-cat">${entry.cat}</div>
       </div>
-      <div class="budget-entry-amt">¥${entry.amt.toLocaleString()}
-      <div class="budget-entry-gbp">£${Math.round(entry.amt * GBP_RATE).toLocaleString()}</div>
+      <div class="budget-entry-right">
+  <div class="budget-entry-amt">
+    ¥${entry.amt.toLocaleString()}
+    <div class="budget-entry-gbp">£${gbp.toLocaleString()}</div>
+  </div>
+  <div class="budget-del" data-id="${entry.id}">✕</div>
 </div>
     `;
 
+row.querySelector(".budget-del").addEventListener("click", () => {
+  const id = entry.id;
+  state.budget = state.budget.filter(e => e.id !== id);
+  saveState();
+  renderBudgetEntries();
+  updateBudgetTotals();
+  showToast("Expense removed");
+});
+     
     wrap.appendChild(row);
   });
 }
@@ -604,10 +617,11 @@ function setupBudgetAdd() {
     }
 
     state.budget.push({
-      desc,
-      amt,
-      cat: catEl.textContent
-    });
+  id: Date.now(),   // unique ID
+  desc,
+  amt,
+  cat: catEl.textContent
+});
 
     saveState();
     document.getElementById("budget-desc").value = "";
