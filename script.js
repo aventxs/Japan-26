@@ -233,6 +233,15 @@ function tagClass(t) {
 /* =========================================================
    RENDER DAYS
    ========================================================= */
+function formatDate(d) {
+  const date = new Date(d);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
 function renderDays() {
   const wrap = document.getElementById("days-container");
   wrap.innerHTML = "";
@@ -255,6 +264,7 @@ function renderDays() {
           <span>•</span>
           <span>${day.items.length} activities</span>
         </div>
+        <div class="dc-date">${formatDate(day.date)}</div>
         <div class="dc-progress">
           <div class="dc-progress-fill" id="dc-prog-${day.day}"></div>
         </div>
