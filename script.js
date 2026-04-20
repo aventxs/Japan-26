@@ -1,14 +1,14 @@
 /* =========================================================
-   JAPAN'26 — MAIN SCRIPT
+   JAPAN'26 — MAIN SCRIPT (FULL REBUILD)
    ========================================================= */
 
 /* =========================================================
    CONSTANTS
    ========================================================= */
-const TRIP_START = new Date("2026-05-08");   // Arrival
-const TRIP_END   = new Date("2026-05-20");   // Departure
+const TRIP_START = new Date("2026-05-08");
+const TRIP_END   = new Date("2026-05-20");
 const BUDGET_LIMIT = 200000;
-const GBP_RATE = 0.0052; // rough conversion
+const GBP_RATE = 0.0052;
 
 /* =========================================================
    ITINERARY DATA — 12 DAYS
@@ -179,20 +179,18 @@ const ITINERARY = [
    STATE
    ========================================================= */
 let state = {
-  completed: {},     // activity completion
-  packing: {},       // packing items
-  budget: [],        // expenses
-  notes: ""          // saved notes
+  completed: {},
+  packing: {},
+  budget: [],
+  notes: ""
 };
 
-/* Load saved state */
 const saved = localStorage.getItem("jp26");
 if (saved) {
   try { state = JSON.parse(saved); }
-  catch { /* ignore corrupted save */ }
+  catch {}
 }
 
-/* Save state */
 function saveState() {
   localStorage.setItem("jp26", JSON.stringify(state));
 }
@@ -218,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================================================
-   TAG CLASS MAPPING
+   TAG CLASS MAP
    ========================================================= */
 const TAG_CLASS_MAP = {
   walk: "walk",
@@ -233,11 +231,10 @@ function tagClass(t) {
 }
 
 /* =========================================================
-   RENDER — DAYS & ACTIVITIES
+   RENDER DAYS
    ========================================================= */
 function renderDays() {
   const wrap = document.getElementById("days-container");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   ITINERARY.forEach(day => {
@@ -282,7 +279,7 @@ function renderDays() {
       act.className = "act" + (done ? " done" : "");
       act.dataset.key = key;
 
-      const tagsHtml = (item.tags || [])
+      const tagsHtml = item.tags
         .map(t => `<div class="act-tag tag-${tagClass(t)}">${t}</div>`)
         .join("");
 
@@ -290,10 +287,7 @@ function renderDays() {
         <div class="act-chk">${done ? "✓" : ""}</div>
         <div class="act-body">
           <div class="act-name">${item.name}</div>
-          <div class="act-tags">
-            ${tagsHtml}
-          </div>
-          ${item.note ? `<div class="act-note">${item.note}</div>` : ""}
+          <div class="act-tags">${tagsHtml}</div>
         </div>
       `;
 
@@ -326,10 +320,10 @@ function toggleActivity(key, element, dayNum) {
   const chk = element.querySelector(".act-chk");
   if (state.completed[key]) {
     element.classList.add("done");
-    if (chk) chk.textContent = "✓";
+    chk.textContent = "✓";
   } else {
     element.classList.remove("done");
-    if (chk) chk.textContent = "";
+    chk.textContent = "";
   }
 
   updateDayProgress(dayNum);
@@ -341,25 +335,20 @@ function toggleActivity(key, element, dayNum) {
    ========================================================= */
 function updateDayProgress(dayNum) {
   const day = ITINERARY.find(d => d.day === dayNum);
-  if (!day) return;
-
   const total = day.items.length;
-  let done = 0;
 
+  let done = 0;
   day.items.forEach((_, idx) => {
-    const key = `${dayNum}-${idx}`;
-    if (state.completed[key]) done++;
+    if (state.completed[`${dayNum}-${idx}`]) done++;
   });
 
-  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  const pct = Math.round((done / total) * 100);
   const fill = document.getElementById(`dc-prog-${dayNum}`);
   if (fill) fill.style.width = pct + "%";
 
   const card = document.querySelector(`.day-card[data-day="${dayNum}"]`);
-  if (card) {
-    if (pct === 100) card.classList.add("completed");
-    else card.classList.remove("completed");
-  }
+  if (pct === 100) card.classList.add("completed");
+  else card.classList.remove("completed");
 }
 
 /* =========================================================
@@ -372,26 +361,22 @@ function updateProgress() {
   ITINERARY.forEach(day => {
     day.items.forEach((_, idx) => {
       total++;
-      const key = `${day.day}-${idx}`;
-      if (state.completed[key]) done++;
+      if (state.completed[`${day.day}-${idx}`]) done++;
     });
   });
 
-  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  const pct = Math.round((done / total) * 100);
 
   const pctEl = document.getElementById("ring-pct");
   const ring = document.getElementById("ring-fill");
   const dots = document.getElementById("day-dots");
 
-  if (pctEl) pctEl.textContent = pct;
-  if (ring) {
-    const circ = 2 * Math.PI * 30;
-    ring.style.strokeDashoffset = circ - (pct / 100) * circ;
-  }
+  pctEl.textContent = pct;
 
-  if (!dots) return;
+  const circ = 2 * Math.PI * 30;
+  ring.style.strokeDashoffset = circ - (pct / 100) * circ;
+
   dots.innerHTML = "";
-
   ITINERARY.forEach(day => {
     let d = 0;
     day.items.forEach((_, idx) => {
@@ -413,7 +398,6 @@ function updateProgress() {
    ========================================================= */
 function renderRoute() {
   const wrap = document.getElementById("route-bar");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   const cities = [];
@@ -446,7 +430,6 @@ function renderRoute() {
 function updateCountdown() {
   const num = document.getElementById("cd-num");
   const label = document.getElementById("cd-label");
-  if (!num || !label) return;
 
   const now = new Date();
   const diff = TRIP_START - now;
@@ -484,7 +467,6 @@ const PACKING_ITEMS = [
 
 function renderPacking() {
   const wrap = document.getElementById("pack-container");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   PACKING_ITEMS.forEach((item, idx) => {
@@ -512,10 +494,10 @@ function togglePack(key, row) {
   const check = row.querySelector(".pack-check");
   if (state.packing[key]) {
     row.classList.add("done");
-    if (check) check.textContent = "✓";
+    check.textContent = "✓";
   } else {
     row.classList.remove("done");
-    if (check) check.textContent = "";
+    check.textContent = "";
   }
 }
 
@@ -538,12 +520,12 @@ function renderBudget() {
 
 function renderBudgetCats() {
   const wrap = document.getElementById("budget-cats");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   BUDGET_CATEGORIES.forEach(cat => {
     const div = document.createElement("div");
     div.className = "budget-cat";
+
     div.textContent = cat;
 
     div.addEventListener("click", () => {
@@ -557,7 +539,6 @@ function renderBudgetCats() {
 
 function renderBudgetEntries() {
   const wrap = document.getElementById("budget-entries");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   if (!state.budget.length) {
@@ -588,34 +569,20 @@ function renderBudgetEntries() {
 function updateBudgetTotals() {
   const total = state.budget.reduce((a, b) => a + b.amt, 0);
 
-  const totalEl = document.getElementById("budget-total");
-  const gbpEl = document.getElementById("budget-gbp");
-  const fillEl = document.getElementById("budget-fill");
-  const limitLabel = document.getElementById("budget-limit-label");
+  document.getElementById("budget-total").textContent = total;
+  document.getElementById("budget-gbp").textContent = `£${Math.round(total * GBP_RATE)}`;
+  document.getElementById("budget-limit-label").textContent = `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
 
-  if (totalEl) totalEl.textContent = total;
-  if (gbpEl) gbpEl.textContent = `£${Math.round(total * GBP_RATE)}`;
-  if (limitLabel) limitLabel.textContent = `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
-
-  if (fillEl) {
-    const pct = Math.min(100, Math.round((total / BUDGET_LIMIT) * 100));
-    fillEl.style.width = pct + "%";
-  }
+  const pct = Math.min(100, Math.round((total / BUDGET_LIMIT) * 100));
+  document.getElementById("budget-fill").style.width = pct + "%";
 }
 
 function setupBudgetAdd() {
   const btn = document.getElementById("budget-add-btn");
-  if (!btn) return;
-
   btn.addEventListener("click", () => {
-    const descEl = document.getElementById("budget-desc");
-    const amtEl = document.getElementById("budget-amt");
+    const desc = document.getElementById("budget-desc").value.trim();
+    const amt = parseInt(document.getElementById("budget-amt").value);
     const catEl = document.querySelector(".budget-cat.active");
-
-    if (!descEl || !amtEl) return;
-
-    const desc = descEl.value.trim();
-    const amt = parseInt(amtEl.value, 10);
 
     if (!desc || !amt || !catEl) {
       showToast("Enter description, amount, and category");
@@ -629,8 +596,8 @@ function setupBudgetAdd() {
     });
 
     saveState();
-    descEl.value = "";
-    amtEl.value = "";
+    document.getElementById("budget-desc").value = "";
+    document.getElementById("budget-amt").value = "";
 
     renderBudgetEntries();
     updateBudgetTotals();
@@ -650,7 +617,6 @@ const INFO = [
 
 function renderInfo() {
   const wrap = document.getElementById("info-grid");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   INFO.forEach(i => {
@@ -678,7 +644,6 @@ const TIPS = [
 
 function renderTips() {
   const wrap = document.getElementById("tips-list");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   TIPS.forEach(t => {
@@ -707,7 +672,6 @@ const PHRASES = [
 
 function renderPhrases() {
   const wrap = document.getElementById("phrases-container");
-  if (!wrap) return;
   wrap.innerHTML = "";
 
   PHRASES.forEach(p => {
@@ -730,35 +694,32 @@ function renderPhrases() {
 }
 
 /* =========================================================
-   NOTES AUTOSAVE (DEBOUNCED)
+   NOTES AUTOSAVE
    ========================================================= */
 function renderNotes() {
   const ta = document.getElementById("notes-ta");
-  const savedEl = document.getElementById("notes-saved");
-  if (!ta) return;
+  const saved = document.getElementById("notes-saved");
 
   ta.value = state.notes || "";
 
-  let notesTimer = null;
+  let timer = null;
 
   ta.addEventListener("input", () => {
     const val = ta.value;
-    if (notesTimer) clearTimeout(notesTimer);
 
-    notesTimer = setTimeout(() => {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
       state.notes = val;
       saveState();
 
-      if (savedEl) {
-        savedEl.classList.add("show");
-        setTimeout(() => savedEl.classList.remove("show"), 800);
-      }
+      saved.classList.add("show");
+      setTimeout(() => saved.classList.remove("show"), 800);
     }, 250);
   });
 }
 
 /* =========================================================
-   PETALS ANIMATION
+   PETALS ANIMATION (🌸 FIXED)
    ========================================================= */
 const petalBtn = document.getElementById("petal-btn");
 if (petalBtn) {
@@ -774,9 +735,30 @@ function spawnPetal() {
   p.style.left = Math.random() * 100 + "vw";
   p.style.animationDuration = 4 + Math.random() * 3 + "s";
   p.style.opacity = 0.6 + Math.random() * 0.4;
+  p.style.zIndex = 9999;
 
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 7000);
+}
+
+/* =========================================================
+   RESET BUTTON (↺ NEW)
+   ========================================================= */
+const resetBtn = document.getElementById("reset-btn");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    if (!confirm("Reset all progress, packing, budget, and notes?")) return;
+
+    state = {
+      completed: {},
+      packing: {},
+      budget: [],
+      notes: ""
+    };
+
+    saveState();
+    location.reload();
+  });
 }
 
 /* =========================================================
@@ -784,22 +766,18 @@ function spawnPetal() {
    ========================================================= */
 function setupTabs() {
   const tabs = document.querySelectorAll(".bntab");
-  if (!tabs.length) return;
 
   tabs.forEach(tab => {
     tab.addEventListener("click", () => {
       const view = tab.dataset.view;
-      if (!view) return;
 
       document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      const target = document.getElementById(`view-${view}`);
-      if (target) target.classList.add("active");
+      document.getElementById(`view-${view}`).classList.add("active");
 
       tabs.forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
 
-      const app = document.getElementById("app");
-      if (app) app.scrollTop = 0;
+      document.getElementById("app").scrollTop = 0;
     });
   });
 }
@@ -813,14 +791,10 @@ function setupInstallBanner() {
   window.addEventListener("beforeinstallprompt", e => {
     e.preventDefault();
     deferredPrompt = e;
-    const banner = document.getElementById("install-banner");
-    if (banner) banner.style.display = "flex";
+    document.getElementById("install-banner").style.display = "flex";
   });
 
-  const btn = document.getElementById("install-btn");
-  if (!btn) return;
-
-  btn.addEventListener("click", async () => {
+  document.getElementById("install-btn").addEventListener("click", async () => {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
@@ -831,8 +805,7 @@ function setupInstallBanner() {
     }
 
     deferredPrompt = null;
-    const banner = document.getElementById("install-banner");
-    if (banner) banner.style.display = "none";
+    document.getElementById("install-banner").style.display = "none";
   });
 }
 
@@ -841,7 +814,6 @@ function setupInstallBanner() {
    ========================================================= */
 function setupOfflineBadge() {
   const badge = document.getElementById("offbadge");
-  if (!badge) return;
 
   function update() {
     badge.style.display = navigator.onLine ? "none" : "block";
@@ -857,8 +829,6 @@ function setupOfflineBadge() {
    ========================================================= */
 function showToast(msg) {
   const t = document.getElementById("toast");
-  if (!t) return;
-
   t.textContent = msg;
   t.classList.add("show");
 
