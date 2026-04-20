@@ -537,10 +537,18 @@ body.offline #offbadge { display: block; }
 
 /* ── PETALS ── */
 .petal {
-  position: fixed; top: -30px; pointer-events: none; z-index: 9997;
-  font-size: 18px; opacity: 0.9;
+  position: fixed;
+  top: -20px;
+  width: 18px;
+  height: 18px;
+  background: #f7d7e8;
+  border-radius: 50%;
+  opacity: 0.9;
+  pointer-events: none;
   animation: fall linear forwards;
+  z-index: 9999; /* ← REQUIRED */
 }
+
 @keyframes fall {
   to { transform: translateY(110vh) rotate(480deg); opacity: 0; }
 }
