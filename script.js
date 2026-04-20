@@ -570,7 +570,9 @@ function renderBudgetEntries() {
         <div class="budget-entry-desc">${entry.desc}</div>
         <div class="budget-entry-cat">${entry.cat}</div>
       </div>
-      <div class="budget-entry-amt">¥${entry.amt}</div>
+      <div class="budget-entry-amt">¥${entry.amt.toLocaleString()}
+      <div class="budget-entry-gbp">£${Math.round(entry.amt * GBP_RATE).toLocaleString()}</div>
+</div>
     `;
 
     wrap.appendChild(row);
@@ -581,7 +583,8 @@ function updateBudgetTotals() {
   const total = state.budget.reduce((a, b) => a + b.amt, 0);
 
   document.getElementById("budget-total").textContent = total;
-  document.getElementById("budget-gbp").textContent = `£${Math.round(total * GBP_RATE)}`;
+  const gbp = Math.round(total * GBP_RATE);
+  document.getElementById("budget-gbp").textContent = `£${gbp.toLocaleString()}`;
   document.getElementById("budget-limit-label").textContent = `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
 
   const pct = Math.min(100, Math.round((total / BUDGET_LIMIT) * 100));
