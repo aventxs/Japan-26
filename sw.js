@@ -1,49 +1,34 @@
-/* =========================================================
-   JAPAN'26 — SERVICE WORKER
-   Offline caching for PWA functionality
-   ========================================================= */
+const CACHE = “japan26-v3”;
+const ASSETS = [“index.html”, “style.css”, “script.js”, “manifest.json”, “icon-192.svg”, “icon-512.svg”];
 
-const CACHE = "japan26-cache-v1";
-
-const ASSETS = [
-  "index.html",
-  "style.css",
-  "script.js",
-  "manifest.json",
-  "icon-192.png",
-  "icon-512.png"
-];
-
-/* Install */
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
+self.addEventListener(“install”, e => {
+e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
-/* Activate */
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE)
-          .map(key => caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
+self.addEventListener(“activate”, e => {
+e.waitUntil(
+caches.keys()
+.then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+.then(() => self.clients.claim())
+);
 });
 
-/* Fetch */
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      return (
-        cached ||
-        fetch(event.request).catch(() => caches.match("index.html"))
-      );
-    })
-  );
+self.addEventListener(“fetch”, e => {
+const url = new URL(e.request.url);
+// Network-first for Google Fonts so they update; cache-first for our own files
+if (url.hostname.includes(“fonts.g”)) {
+e.respondWith(
+fetch(e.request)
+.then(res => { caches.open(CACHE).then(c => c.put(e.request, res.clone())); return res; })
+.catch(() => caches.match(e.request))
+);
+} else {
+e.respondWith(
+caches.match(e.request)
+.then(cached => cached || fetch(e.request)
+.then(res => { if(res.ok){ caches.open(CACHE).then(c => c.put(e.request, res.clone())); } return res; })
+.catch(() => caches.match(“index.html”))
+)
+);
+}
 });
