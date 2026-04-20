@@ -457,10 +457,6 @@ body.offline #offbadge { display: block; }
 .budget-entry-right { display: flex; align-items: center; gap: 8px; }
 .budget-entry-amt { font-size: 14px; font-weight: 600; color: var(--snow); font-family: var(--jp); }
 .budget-del {
-  font-size: 14px; cursor: pointer; color: var(--fog);
-  padding: 4px; transition: color 0.2s;
-}
-.budget-del {
   font-size: 13px;
   cursor: pointer;
   color: var(--fog);
