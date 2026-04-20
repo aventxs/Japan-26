@@ -272,7 +272,7 @@ body.offline #offbadge { display: block; }
 .dc-hdr:active { background: var(--lift); }
 
 .dc-date {
-  font-size: 10px;
+  font-size: 7px;
   color: var(--fog);
   margin-top: 2px;
   letter-spacing: 0.5px;
