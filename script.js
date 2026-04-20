@@ -735,11 +735,12 @@ function spawnPetal() {
   p.style.left = Math.random() * 100 + "vw";
   p.style.animationDuration = 4 + Math.random() * 3 + "s";
   p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999;
+  p.style.zIndex = 9999; // ← REQUIRED
 
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 7000);
 }
+
 
 /* =========================================================
    RESET BUTTON (↺ NEW)
