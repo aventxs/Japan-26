@@ -561,44 +561,53 @@ function renderBudgetEntries() {
     return;
   }
 
-  state.budget.forEach(entry => {
+  state.budget.forEach((entry, index) => {
     const row = document.createElement("div");
     row.className = "budget-entry";
 
+    const amt = Number(entry.amt) || 0;
+    const gbp = Math.round(amt * GBP_RATE);
+
     row.innerHTML = `
       <div class="budget-entry-left">
-        <div class="budget-entry-desc">${entry.desc}</div>
-        <div class="budget-entry-cat">${entry.cat}</div>
+        <div class="budget-entry-desc">${entry.desc || ""}</div>
+        <div class="budget-entry-cat">${entry.cat || ""}</div>
       </div>
+
       <div class="budget-entry-right">
-  <div class="budget-entry-amt">
-    ¥${entry.amt.toLocaleString()}
-    <div class="budget-entry-gbp">£${gbp.toLocaleString()}</div>
-  </div>
-  <div class="budget-del" data-id="${entry.id}">✕</div>
-</div>
+        <div class="budget-entry-amt">
+          ¥${amt.toLocaleString()}
+          <div class="budget-entry-gbp">£${gbp.toLocaleString()}</div>
+        </div>
+        <div class="budget-del" data-index="${index}">✕</div>
+      </div>
     `;
 
-row.querySelector(".budget-del").addEventListener("click", () => {
-  const id = entry.id;
-  state.budget = state.budget.filter(e => e.id !== id);
-  saveState();
-  renderBudgetEntries();
-  updateBudgetTotals();
-  showToast("Expense removed");
-});
-     
+    row.querySelector(".budget-del").addEventListener("click", () => {
+      const idx = Number(row.querySelector(".budget-del").dataset.index);
+      state.budget.splice(idx, 1);      // delete by index (works for old + new)
+      saveState();
+      renderBudgetEntries();
+      updateBudgetTotals();
+      showToast("Expense removed");
+    });
+
     wrap.appendChild(row);
   });
 }
 
 function updateBudgetTotals() {
-  const total = state.budget.reduce((a, b) => a + b.amt, 0);
+  const total = state.budget.reduce((sum, entry) => {
+    const amt = Number(entry.amt) || 0;
+    return sum + amt;
+  }, 0);
 
-  document.getElementById("budget-total").textContent = total;
   const gbp = Math.round(total * GBP_RATE);
+
+  document.getElementById("budget-total").textContent = total.toLocaleString();
   document.getElementById("budget-gbp").textContent = `£${gbp.toLocaleString()}`;
-  document.getElementById("budget-limit-label").textContent = `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
+  document.getElementById("budget-limit-label").textContent =
+    `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
 
   const pct = Math.min(100, Math.round((total / BUDGET_LIMIT) * 100));
   document.getElementById("budget-fill").style.width = pct + "%";
@@ -608,20 +617,21 @@ function setupBudgetAdd() {
   const btn = document.getElementById("budget-add-btn");
   btn.addEventListener("click", () => {
     const desc = document.getElementById("budget-desc").value.trim();
-    const amt = parseInt(document.getElementById("budget-amt").value);
+    const amtVal = document.getElementById("budget-amt").value;
+    const amt = parseInt(amtVal, 10);
     const catEl = document.querySelector(".budget-cat.active");
 
-    if (!desc || !amt || !catEl) {
+    if (!desc || isNaN(amt) || !catEl) {
       showToast("Enter description, amount, and category");
       return;
     }
 
     state.budget.push({
-  id: Date.now(),   // unique ID
-  desc,
-  amt,
-  cat: catEl.textContent
-});
+      id: Date.now(),                 // new entries get an id
+      desc,
+      amt,
+      cat: catEl.textContent
+    });
 
     saveState();
     document.getElementById("budget-desc").value = "";
@@ -632,6 +642,7 @@ function setupBudgetAdd() {
     showToast("Expense added");
   });
 }
+
 
 /* =========================================================
    INFO CARDS
