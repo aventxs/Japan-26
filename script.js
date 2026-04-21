@@ -27,21 +27,16 @@ const ITINERARY = [
       { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
     ]
   },
-
-  {
+    {
     day: 2,
     date: "2026-05-10",
-    title: "Shibuya • Harajuku • Mario Kart • Shibuya Sky",
+    title: "Shinjuku + Drift Tour",
     city: "Tokyo",
     walk: 2,
     items: [
-      { time: "10:30", name: "Shibuya 109 (fashion)", tags: ["shop"] },
-      { time: "11:30", name: "LOFT / lifestyle stores", tags: ["shop"] },
-      { time: "12:00", name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
-      { time: "13:00", name: "Mario Kart Street Tour (Afternoon slot)", tags: ["fun","experience"] },
-      { time: "15:00", name: "Break / explore Shibuya", tags: ["rest"] },
-      { time: "17:30", name: "Shibuya Sky (sunset → night)", tags: ["view","fun"] },
-      { time: "19:30", name: "Gyumon Halal Yakiniku (Dinner)", tags: ["food","halal"] }
+      { time: "11:00", name: "Shinjuku exploring (Kabukicho, tech stores)", tags: ["shop","fun"] },
+      { time: "16:00", name: "Rest at hotel", tags: ["rest"] },
+      { time: "17:30", name: "Tokyo Drift / Go-Kart Experience", tags: ["fun","experience"] }
     ]
   },
 
@@ -61,13 +56,17 @@ const ITINERARY = [
   {
     day: 4,
     date: "2026-05-12",
-    title: "Shinjuku + Drift Tour",
+    title: "Shibuya • Harajuku • Mario Kart • Shibuya Sky",
     city: "Tokyo",
     walk: 2,
     items: [
-      { time: "11:00", name: "Shinjuku exploring (Kabukicho, tech stores)", tags: ["shop","fun"] },
-      { time: "15:00", name: "Rest at hotel", tags: ["rest"] },
-      { time: "18:00", name: "Tokyo Drift / Go-Kart Experience", tags: ["fun","experience"] }
+      { time: "10:30", name: "Shibuya 109 (fashion)", tags: ["shop"] },
+      { time: "11:30", name: "LOFT / lifestyle stores", tags: ["shop"] },
+      { time: "12:00", name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
+      { time: "13:00", name: "Mario Kart Street Tour (Afternoon slot)", tags: ["fun","experience"] },
+      { time: "15:00", name: "Break / explore Shibuya", tags: ["rest"] },
+      { time: "17:30", name: "Shibuya Sky (sunset → night)", tags: ["view","fun"] },
+      { time: "19:30", name: "Gyumon Halal Yakiniku (Dinner)", tags: ["food","halal"] }
     ]
   },
 
@@ -86,20 +85,6 @@ const ITINERARY = [
 
   {
     day: 6,
-    date: "2026-05-14",
-    title: "Kiyomizu-dera → Sannenzaka → Gion",
-    city: "Kyoto",
-    walk: 3,
-    items: [
-      { time: "10:30", name: "Taxi to Kiyomizu-dera", tags: ["travel"] },
-      { time: "11:00", name: "Kiyomizu-dera Temple", tags: ["walk","view"] },
-      { time: "12:30", name: "Downhill Sannenzaka / Ninenzaka", tags: ["walk","shop"] },
-      { time: "17:00", name: "Gion District evening walk", tags: ["walk","view"] }
-    ]
-  },
-
-  {
-    day: 7,
     date: "2026-05-15",
     title: "Arashiyama + teamLab Biovortex",
     city: "Kyoto",
@@ -111,6 +96,20 @@ const ITINERARY = [
     ]
   },
 
+  {
+    day: 7,
+    date: "2026-05-14",
+    title: "Kiyomizu-dera → Sannenzaka → Gion",
+    city: "Kyoto",
+    walk: 3,
+    items: [
+      { time: "10:30", name: "Taxi to Kiyomizu-dera", tags: ["travel"] },
+      { time: "11:00", name: "Kiyomizu-dera Temple", tags: ["walk","view"] },
+      { time: "12:30", name: "Downhill Sannenzaka / Ninenzaka", tags: ["walk","shop"] },
+      { time: "17:00", name: "Gion District evening walk", tags: ["walk","view"] }
+    ]
+  },
+   
   {
     day: 8,
     date: "2026-05-16",
@@ -146,7 +145,8 @@ const ITINERARY = [
     walk: 2,
     items: [
       { time: "11:00", name: "Shinsaibashi Shopping Street", tags: ["shop"] },
-      { time: "15:00", name: "Rinku Premium Outlets (near KIX)", tags: ["shop","food"] }
+      { time: "15:00", name: "Rinku Premium Outlets (near KIX)", tags: ["shop","food"] },
+      { time: "21:00", name: "Round 1 Stadium Sennichimae", tags: ["fun"] }
     ]
   },
 
@@ -233,6 +233,15 @@ function tagClass(t) {
 /* =========================================================
    RENDER DAYS
    ========================================================= */
+function formatDate(d) {
+  const date = new Date(d);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
 function renderDays() {
   const wrap = document.getElementById("days-container");
   wrap.innerHTML = "";
@@ -255,6 +264,7 @@ function renderDays() {
           <span>•</span>
           <span>${day.items.length} activities</span>
         </div>
+        <div class="dc-date">${formatDate(day.date)}</div>
         <div class="dc-progress">
           <div class="dc-progress-fill" id="dc-prog-${day.day}"></div>
         </div>
@@ -286,8 +296,9 @@ function renderDays() {
       act.innerHTML = `
         <div class="act-chk">${done ? "✓" : ""}</div>
         <div class="act-body">
-          <div class="act-name">${item.name}</div>
-          <div class="act-tags">${tagsHtml}</div>
+        <div class="act-time">${item.time}</div>
+        <div class="act-name">${item.name}</div>
+        <div class="act-tags">${tagsHtml}</div>
         </div>
       `;
 
@@ -550,28 +561,53 @@ function renderBudgetEntries() {
     return;
   }
 
-  state.budget.forEach(entry => {
+  state.budget.forEach((entry, index) => {
     const row = document.createElement("div");
     row.className = "budget-entry";
 
+    const amt = Number(entry.amt) || 0;
+    const gbp = Math.round(amt * GBP_RATE);
+
     row.innerHTML = `
       <div class="budget-entry-left">
-        <div class="budget-entry-desc">${entry.desc}</div>
-        <div class="budget-entry-cat">${entry.cat}</div>
+        <div class="budget-entry-desc">${entry.desc || ""}</div>
+        <div class="budget-entry-cat">${entry.cat || ""}</div>
       </div>
-      <div class="budget-entry-amt">¥${entry.amt}</div>
+
+      <div class="budget-entry-right">
+        <div class="budget-entry-amt">
+          ¥${amt.toLocaleString()}
+          <div class="budget-entry-gbp">£${gbp.toLocaleString()}</div>
+        </div>
+        <div class="budget-del" data-index="${index}">✕</div>
+      </div>
     `;
+
+    row.querySelector(".budget-del").addEventListener("click", () => {
+      const idx = Number(row.querySelector(".budget-del").dataset.index);
+      state.budget.splice(idx, 1);      // delete by index (works for old + new)
+      saveState();
+      renderBudgetEntries();
+      updateBudgetTotals();
+      showToast("Expense removed");
+    });
 
     wrap.appendChild(row);
   });
 }
 
 function updateBudgetTotals() {
-  const total = state.budget.reduce((a, b) => a + b.amt, 0);
+  const total = state.budget.reduce((sum, entry) => {
+    const amt = Number(entry.amt) || 0;
+    return sum + amt;
+  }, 0);
 
-  document.getElementById("budget-total").textContent = total;
-  document.getElementById("budget-gbp").textContent = `£${Math.round(total * GBP_RATE)}`;
-  document.getElementById("budget-limit-label").textContent = `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
+  const gbp = Math.round(total * GBP_RATE);
+
+  document.getElementById("budget-total").textContent = total.toLocaleString();
+  document.getElementById("budget-gbp").textContent = `£${gbp.toLocaleString()}`;
+  document.getElementById("budget-limit-label").textContent =
+    `of ¥${BUDGET_LIMIT.toLocaleString()} budget`;
 
   const pct = Math.min(100, Math.round((total / BUDGET_LIMIT) * 100));
   document.getElementById("budget-fill").style.width = pct + "%";
@@ -581,15 +617,17 @@ function setupBudgetAdd() {
   const btn = document.getElementById("budget-add-btn");
   btn.addEventListener("click", () => {
     const desc = document.getElementById("budget-desc").value.trim();
-    const amt = parseInt(document.getElementById("budget-amt").value);
+    const amtVal = document.getElementById("budget-amt").value;
+    const amt = parseInt(amtVal, 10);
     const catEl = document.querySelector(".budget-cat.active");
 
-    if (!desc || !amt || !catEl) {
+    if (!desc || isNaN(amt) || !catEl) {
       showToast("Enter description, amount, and category");
       return;
     }
 
     state.budget.push({
+      id: Date.now(),                 // new entries get an id
       desc,
       amt,
       cat: catEl.textContent
@@ -604,6 +642,7 @@ function setupBudgetAdd() {
     showToast("Expense added");
   });
 }
+
 
 /* =========================================================
    INFO CARDS
@@ -735,11 +774,12 @@ function spawnPetal() {
   p.style.left = Math.random() * 100 + "vw";
   p.style.animationDuration = 4 + Math.random() * 3 + "s";
   p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999;
+  p.style.zIndex = 9999; // ← REQUIRED
 
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 7000);
 }
+
 
 /* =========================================================
    RESET BUTTON (↺ NEW)
