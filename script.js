@@ -774,12 +774,32 @@ function spawnPetal() {
   p.style.left = Math.random() * 100 + "vw";
   p.style.animationDuration = 4 + Math.random() * 3 + "s";
   p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999; // ← REQUIRED
+  p.style.zIndex = 9999;
 
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 7000);
 }
 
+
+/* =========================================================
+   RESET BUTTON (↺ NEW)
+   ========================================================= */
+const resetBtn = document.getElementById("reset-btn");
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    if (!confirm("Reset all progress, packing, budget, and notes?")) return;
+
+    state = {
+      completed: {},
+      packing: {},
+      budget: [],
+      notes: ""
+    };
+
+    saveState();
+    location.reload();
+  });
+}
 
 /* =========================================================
    RESET BUTTON (↺ NEW)
