@@ -85,7 +85,7 @@ const ITINERARY = [
 
   {
     day: 6,
-    date: "2026-05-15",
+    date: "2026-05-14",
     title: "Arashiyama + teamLab Biovortex",
     city: "Kyoto",
     walk: 2,
@@ -98,7 +98,7 @@ const ITINERARY = [
 
   {
     day: 7,
-    date: "2026-05-14",
+    date: "2026-05-15",
     title: "Kiyomizu-dera → Sannenzaka → Gion",
     city: "Kyoto",
     walk: 3,
