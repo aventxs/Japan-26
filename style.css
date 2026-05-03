@@ -792,20 +792,28 @@ body.offline #offbadge { display: block; }
   display: flex;
 }
 
-/* Modal sheet */
 .modal-sheet {
   width: 100%;
-  max-width: 480px;
-  height: 92vh;
+  height: calc(100dvh - 20px); /* iOS‑safe height */
+  max-height: calc(100dvh - 20px);
+
   background: rgba(15,20,32,0.92);
   backdrop-filter: blur(22px);
+
   border-radius: 22px 22px 0 0;
   border: 1px solid var(--line);
-  overflow: hidden;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  padding-bottom: env(safe-area-inset-bottom);
+
   display: flex;
   flex-direction: column;
+
   animation: modalSlideUp 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
 @keyframes modalSlideUp {
   from { transform: translateY(40px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
