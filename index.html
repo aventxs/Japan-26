@@ -1,52 +1,37 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <!-- Theme -->
   <meta name="theme-color" content="#06080f">
-
-  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Japan'26">
-
-  <!-- Title -->
   <title>Japan'26</title>
-
-  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
-
-  <!-- iOS Home Screen Icon -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-
-  <!-- Fonts -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
   <!-- Offline Badge -->
+
   <div id="offbadge">✈ Offline</div>
 
   <!-- Toast -->
+
   <div id="toast"></div>
 
-  <!-- SPLASH SCREEN -->
+  <!-- ── SPLASH ── -->
+
   <div id="splash">
-    <svg class="splash-kamon" viewBox="0 0 100 100">
+    <svg class="splash-kamon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g opacity=".9">
-        <!-- 16 rotating petals -->
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(0 50 50)"/>
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(22.5 50 50)"/>
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(45 50 50)"/>
@@ -67,10 +52,8 @@
       <circle cx="50" cy="50" r="8" fill="#d4a84b"/>
       <circle cx="50" cy="50" r="44" fill="none" stroke="#d4a84b" stroke-width="1" opacity=".25"/>
     </svg>
-
     <div class="splash-title">日本旅行</div>
     <div class="splash-sub">Japan Travel Planner</div>
-
     <div class="splash-dots">
       <div class="splash-dot"></div>
       <div class="splash-dot"></div>
@@ -78,241 +61,185 @@
     </div>
   </div>
 
-  <!-- APP WRAPPER -->
+  <!-- ── APP ── -->
+
   <div id="app">
 
-    <!-- HEADER -->
-    <div class="hdr">
-      <div class="hdr-brand">
-        <div class="hdr-jp">日本旅行</div>
-        <div class="hdr-sub" id="hdr-sub">Japan Planner</div>
-      </div>
+```
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-jp">日本旅行</div>
+    <div class="hdr-sub" id="hdr-sub">Japan Planner</div>
+  </div>
+  <div class="hdr-right">
+    <button class="ibtn" id="petal-btn" title="Sakura">🌸</button>
+    <button class="ibtn" id="reset-btn" title="Reset">↺</button>
+  </div>
+</div><!-- /hdr -->
 
-      <div class="hdr-right">
-  <button class="ibtn ibtn-ghost" id="petal-btn">
-    Bloom
-  </button>
-  <button class="ibtn ibtn-ghost" id="reset-btn">
-    Reset
-  </button>
+<!-- INSTALL BANNER -->
+<div id="install-banner">
+  <span style="font-size:22px">📲</span>
+  <p><strong>Install as App</strong><br>Works offline — no signal needed on your trip</p>
+  <button class="inst-btn" id="install-btn">Add</button>
 </div>
 
+<!-- ── TRIP VIEW ── -->
+<div class="view active" id="view-trip">
 
-    <!-- INSTALL BANNER -->
-    <div id="install-banner">
-      <span style="font-size:22px">📲</span>
-      <p><strong>Install as App</strong><br>Offline access on your trip — no signal needed</p>
-      <button class="inst-btn" id="install-btn">Add</button>
+  <div class="slabel">Countdown</div>
+  <div class="countdown">
+    <div class="cd-num" id="cd-num">—</div>
+    <div class="cd-info">
+      <div class="cd-label" id="cd-label">Days to go</div>
+      <div class="cd-date">Tokyo · 09–20 May 2026</div>
+      <div class="cd-sub" id="cd-sub">Planning mode activated 🗾</div>
     </div>
-
-    <!-- TRIP VIEW -->
-    <div class="view active" id="view-trip">
-
-      <div class="slabel">Countdown</div>
-      <div class="countdown" id="countdown-card">
-        <div class="cd-num" id="cd-num">—</div>
-        <div class="cd-info">
-          <div class="cd-label" id="cd-label">Days to go</div>
-          <div class="cd-date" id="cd-date">Tokyo · 09–20 May 2026</div>
-          <div class="cd-sub" id="cd-sub">Set your departure in Notes</div>
-        </div>
-        <div class="cd-icon">✈️</div>
-      </div>
-
-      <div class="slabel">Overall Progress</div>
-      <div class="progress-wrap">
-        <div class="ring-wrap">
-          <svg width="68" height="68" viewBox="0 0 68 68">
-            <circle class="trk" cx="34" cy="34" r="30"/>
-            <circle class="fll" id="ring-fill" cx="34" cy="34" r="30"/>
-          </svg>
-          <div class="ring-label">
-            <div class="ring-pct" id="ring-pct">0</div>
-            <div class="ring-unit">%</div>
-          </div>
-        </div>
-
-        <div class="prog-info">
-          <div class="prog-title" id="prog-title">Your journey awaits 🌸</div>
-          <div class="prog-sub" id="prog-sub">Tap activities to log them as complete.</div>
-          <div class="day-dots" id="day-dots"></div>
-        </div>
-      </div>
-
-      <div class="slabel">Route</div>
-      <div class="route-bar" id="route-bar"></div>
-
-      <div class="slabel">12‑Day Itinerary</div>
-      <div id="days-container"></div>
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- DAY VIEW -->
-    <div class="view" id="view-day">
-      <div class="slabel">Day Details</div>
-      <div id="day-header"></div>
-      <div id="day-items"></div>
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- PACKING VIEW -->
-    <div class="view" id="view-pack">
-      <div class="slabel">Packing List</div>
-      <div class="pack-wrap" id="pack-container"></div>
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- BUDGET VIEW -->
-    <div class="view" id="view-budget">
-      <div class="slabel">Trip Budget</div>
-
-      <div class="budget-card">
-        <div class="budget-title">Total Spent</div>
-        <div class="budget-amount">
-          <div class="budget-sym">¥</div>
-          <div class="budget-val" id="budget-total">0</div>
-          <div class="budget-cur">JPY</div>
-        </div>
-
-        <div class="budget-bar-wrap">
-          <div class="budget-bar-label">
-            <span id="budget-gbp">£0</span>
-            <span id="budget-limit-label">of ¥200,000 budget</span>
-          </div>
-          <div class="budget-bar">
-            <div class="budget-fill" id="budget-fill"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slabel">Add Expense</div>
-      <div class="budget-card">
-        <div class="budget-cats" id="budget-cats"></div>
-
-        <div class="budget-add">
-          <div class="budget-input-row">
-            <input class="budget-input" id="budget-desc" placeholder="What did you buy?">
-            <input class="budget-input" id="budget-amt" type="number" placeholder="¥">
-          </div>
-
-          <button class="budget-add-btn" id="budget-add-btn">Add</button>
-        </div>
-      </div>
-
-      <div class="slabel">Expenses</div>
-      <div class="budget-card">
-        <div class="budget-entries" id="budget-entries">
-          <div style="font-size:12px;color:var(--mist);text-align:center;padding:20px 0">
-            No expenses yet. Start logging!
-          </div>
-        </div>
-      </div>
-
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- INFO VIEW -->
-    <div class="view" id="view-info">
-      <div class="slabel">Useful Info</div>
-      <div class="info-grid" id="info-grid"></div>
-
-      <div class="slabel">Travel Tips</div>
-      <div class="tips-list" id="tips-list"></div>
-
-      <div class="slabel">Useful Phrases</div>
-      <div class="phrases-container" id="phrases-container"></div>
-
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- NOTES VIEW -->
-    <div class="view" id="view-notes">
-      <div class="slabel">Travel Notes</div>
-
-      <div class="notes-card">
-        <div class="notes-hdr">
-          <span>✍🏽 Saved automatically</span>
-          <span class="notes-saved" id="notes-saved">Saved ✓</span>
-        </div>
-
-        <textarea
-          class="notes-input"
-          id="notes-ta"
-          placeholder="Confirmation codes, reminders, phrases…
-
-e.g. Hotel: Akasaka — code #XXXX
-Departure: 08 May, Haneda → Tokyo
-Return: 20 May, KIX 09:30"
-        ></textarea>
-      </div>
-
-      <div class="scroll-end">· · ·</div>
-    </div>
-
+    <div class="cd-icon">✈️</div>
   </div>
 
-<!-- ============================
-     FULL‑SCREEN EDITOR MODAL
-     Japan’26 Custom Style
-=============================== -->
-<div id="editor-modal" class="modal">
-  <div class="modal-sheet">
-
-    <!-- Modal Header -->
-    <div class="modal-header">
-      <div class="modal-header-bg"></div>
-
-      <div class="modal-header-inner">
-        <div class="modal-title-wrap">
-          <div class="modal-sakura"></div>
-          <div class="modal-title">Edit Day</div>
-        </div>
-
-        <button class="modal-close-btn" id="modal-close-btn">×</button>
+  <div class="slabel">Overall Progress</div>
+  <div class="progress-wrap">
+    <div class="ring-wrap">
+      <svg width="68" height="68" viewBox="0 0 68 68">
+        <circle class="trk" cx="34" cy="34" r="30"/>
+        <circle class="fll" id="ring-fill" cx="34" cy="34" r="30"/>
+      </svg>
+      <div class="ring-label">
+        <div class="ring-pct" id="ring-pct">0</div>
+        <div class="ring-unit">%</div>
       </div>
-
-      <div class="modal-header-accent"></div>
     </div>
-
-    <!-- Modal Content -->
-    <div class="modal-body">
-
-      <!-- Day Title -->
-      <label class="modal-label">Title</label>
-      <input id="edit-title" class="modal-input">
-
-      <!-- City -->
-      <label class="modal-label">City</label>
-      <input id="edit-city" class="modal-input">
-
-      <!-- Activities -->
-      <label class="modal-label">Activities</label>
-      <div id="edit-items" class="modal-items"></div>
-
-      <!-- Add Activity -->
-      <button id="add-item-btn" class="modal-fab">
-        <span class="fab-plus">+</span>
-        Add Activity
-      </button>
-
-      <!-- Add Day -->
-      <button id="add-day-btn" class="modal-btn modal-btn-gold">
-        + Add New Day
-      </button>
-
-      <!-- Delete Day -->
-      <button id="delete-day-btn" class="modal-btn modal-btn-danger">
-        Delete This Day
-      </button>
-
-      <!-- Save -->
-      <button id="save-day-btn" class="modal-btn modal-btn-primary">
-        Save Changes
-      </button>
-
+    <div class="prog-info">
+      <div class="prog-title" id="prog-title">Your journey awaits 🌸</div>
+      <div class="prog-sub" id="prog-sub">Tap activities to log them as complete.</div>
+      <div class="day-dots" id="day-dots"></div>
     </div>
+  </div>
+
+  <div class="slabel">Route</div>
+  <div class="route-bar" id="route-bar"></div>
+
+  <div class="slabel">12-Day Itinerary <span class="slabel-hint">hold to edit</span></div>
+  <div id="days-container"></div>
+  <div class="scroll-end">· · ·</div>
+</div><!-- /view-trip -->
+
+<!-- ── PACK VIEW ── -->
+<div class="view" id="view-pack">
+  <div class="slabel">Packing List</div>
+  <div class="pack-wrap" id="pack-container"></div>
+  <div class="scroll-end">· · ·</div>
+</div>
+
+<!-- ── BUDGET VIEW ── -->
+<div class="view" id="view-budget">
+  <div class="slabel">Trip Budget</div>
+
+  <div class="budget-card">
+    <div class="budget-title">Total Spent</div>
+    <div class="budget-amount">
+      <div class="budget-sym">¥</div>
+      <div class="budget-val" id="budget-total">0</div>
+      <div class="budget-cur">JPY</div>
+    </div>
+    <div class="budget-bar-wrap">
+      <div class="budget-bar-label">
+        <span id="budget-gbp">£0</span>
+        <span id="budget-limit-label">of ¥200,000 budget</span>
+      </div>
+      <div class="budget-bar">
+        <div class="budget-fill" id="budget-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Add Expense</div>
+  <div class="budget-card">
+    <div class="budget-cats" id="budget-cats"></div>
+    <div class="budget-input-row">
+      <input class="budget-input" id="budget-desc" placeholder="What did you buy?" autocomplete="off">
+      <input class="budget-input" id="budget-amt" type="number" placeholder="¥" min="1" inputmode="numeric">
+    </div>
+    <button class="budget-add-btn" id="budget-add-btn">+ Add Expense</button>
+  </div>
+
+  <div class="slabel">Expenses</div>
+  <div class="budget-card">
+    <div class="budget-entries" id="budget-entries">
+      <div class="budget-empty">No expenses yet — start logging!</div>
+    </div>
+  </div>
+  <div class="scroll-end">· · ·</div>
+</div><!-- /view-budget -->
+
+<!-- ── INFO VIEW ── -->
+<div class="view" id="view-info">
+  <div class="slabel">Useful Info</div>
+  <div class="info-grid" id="info-grid"></div>
+  <div class="slabel">Travel Tips</div>
+  <div class="tips-list" id="tips-list"></div>
+  <div class="slabel">Useful Phrases — tap to copy</div>
+  <div class="phrases-container" id="phrases-container"></div>
+  <div class="scroll-end">· · ·</div>
+</div>
+
+<!-- ── NOTES VIEW ── -->
+<div class="view" id="view-notes">
+  <div class="slabel">Travel Notes</div>
+  <div class="notes-card">
+    <div class="notes-hdr">
+      <span>✍🏽 &nbsp;Saved automatically</span>
+      <span class="notes-saved" id="notes-saved">Saved ✓</span>
+    </div>
+    <textarea class="notes-input" id="notes-ta"
+      placeholder="Confirmation codes, reminders, hotel details…
+```
+
+Hotel: Akasaka — code #XXXX
+Departure: 08 May, Haneda T3
+Return: 20 May, KIX 09:30
+
+Halal near Shinjuku:
+– Gyumon Halal Yakiniku”></textarea>
+</div>
+<div class="scroll-end">· · ·</div>
+</div>
+
+  </div><!-- /app -->
+
+  <!-- ── EDITOR MODAL (single, correct ID) ── -->
+
+  <div id="editor-modal" class="modal">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+
+```
+  <div class="modal-header">
+    <div class="modal-title">✏️ Edit Day</div>
+    <button class="modal-close-btn" id="modal-close-btn">✕</button>
+  </div>
+
+  <div class="modal-body">
+    <label class="modal-label">Day Title</label>
+    <input id="edit-title" class="modal-input" placeholder="e.g. Shibuya + Harajuku">
+
+    <label class="modal-label">City</label>
+    <input id="edit-city" class="modal-input" placeholder="e.g. Tokyo">
+
+    <label class="modal-label">Activities</label>
+    <div id="edit-items" class="modal-items"></div>
+
+    <button id="add-item-btn" class="modal-btn modal-btn-ghost">+ Add Activity</button>
+    <button id="save-day-btn" class="modal-btn modal-btn-primary">Save Changes</button>
+    <button id="add-day-btn" class="modal-btn modal-btn-ghost">+ Add New Day</button>
+    <button id="delete-day-btn" class="modal-btn modal-btn-danger">Delete This Day</button>
   </div>
 </div>
+```
+
+  </div>
 
   <!-- BOTTOM NAV -->
 <nav class="bnav" id="bnav">
@@ -337,24 +264,6 @@ Return: 20 May, KIX 09:30"
     <span class="bntab-label">Notes</span>
   </button>
 </nav>
-
-<div id="editor-modal" class="modal">
-  <div class="modal-content">
-    <h2>Edit Day</h2>
-
-    <label>Title</label>
-    <input id="edit-title">
-
-    <label>City</label>
-    <input id="edit-city">
-
-    <label>Items</label>
-    <div id="edit-items"></div>
-
-    <button id="add-item-btn">Add Activity</button>
-    <button id="save-day-btn">Save</button>
-  </div>
-</div>
 
 
   <!-- MAIN SCRIPT -->
