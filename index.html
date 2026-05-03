@@ -251,6 +251,69 @@ Return: 20 May, KIX 09:30"
 
   </div>
 
+<!-- ============================
+     FULL‑SCREEN EDITOR MODAL
+     Japan’26 Custom Style
+=============================== -->
+<div id="editor-modal" class="modal">
+  <div class="modal-sheet">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-header-bg"></div>
+
+      <div class="modal-header-inner">
+        <div class="modal-title-wrap">
+          <div class="modal-sakura"></div>
+          <div class="modal-title">Edit Day</div>
+        </div>
+
+        <button class="modal-close-btn" id="modal-close-btn">×</button>
+      </div>
+
+      <div class="modal-header-accent"></div>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="modal-body">
+
+      <!-- Day Title -->
+      <label class="modal-label">Title</label>
+      <input id="edit-title" class="modal-input">
+
+      <!-- City -->
+      <label class="modal-label">City</label>
+      <input id="edit-city" class="modal-input">
+
+      <!-- Activities -->
+      <label class="modal-label">Activities</label>
+      <div id="edit-items" class="modal-items"></div>
+
+      <!-- Add Activity -->
+      <button id="add-item-btn" class="modal-fab">
+        <span class="fab-plus">+</span>
+        Add Activity
+      </button>
+
+      <!-- Add Day -->
+      <button id="add-day-btn" class="modal-btn modal-btn-gold">
+        + Add New Day
+      </button>
+
+      <!-- Delete Day -->
+      <button id="delete-day-btn" class="modal-btn modal-btn-danger">
+        Delete This Day
+      </button>
+
+      <!-- Save -->
+      <button id="save-day-btn" class="modal-btn modal-btn-primary">
+        Save Changes
+      </button>
+
+    </div>
+  </div>
+</div>
+
   <!-- BOTTOM NAV -->
 <nav class="bnav" id="bnav">
   <button class="bntab active" data-view="trip">
