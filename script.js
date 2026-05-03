@@ -240,12 +240,23 @@ updateOfflineBadge();
 // NAVIGATION
 // =========================================================
 function initNav() {
-  const tabs = $$('.bntab');
-  tabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const view = btn.dataset.view;
-      $$('.bntab').forEach(b => b.classList.toggle('active', b === btn));
-      $$('.view').forEach(v => v.classList.toggle('active', v.id === `view-${view}`));
+  const tabs = document.querySelectorAll('.bntab');
+  const views = document.querySelectorAll('.view');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.view;
+
+      // highlight active tab
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+
+      // show correct view
+      views.forEach(v => {
+        v.classList.toggle('active', v.id === `view-${target}`);
+      });
+
+      // scroll to top of the view
+      document.querySelector('#app').scrollTop = 0;
     });
   });
 }
