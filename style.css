@@ -67,6 +67,7 @@ body::after {
   overscroll-behavior-y: contain;
   padding-bottom: 84px;
   position: relative;
+  margin-left: 48px;
 }
 #app::-webkit-scrollbar { display: none; }
 
@@ -174,6 +175,30 @@ body.offline #offbadge { display: block; }
   padding: 8px 14px; border-radius: var(--rsm);
   font-size: 13px; font-weight: 600; color: #000;
   cursor: pointer; flex-shrink: 0; font-family: var(--ui);
+}
+
+#left-rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 48px; /* or whatever your original width was */
+  height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 0;
+  background: transparent;
+
+  pointer-events: none; /* prevents blocking taps */
+  z-index: 9998;
+}
+
+#left-rail * {
+  pointer-events: auto; /* allow Bloom + Reset to work */
 }
 
 /* ── SECTION LABELS ── */
