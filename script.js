@@ -295,13 +295,31 @@ function renderDays() {
       card.classList.toggle("day-open");
     });
 
-    // Long‑press → open editor modal
-    let pressTimer = null;
-    hdr.addEventListener("mousedown", () => {
-      pressTimer = setTimeout(() => openDayEditor(day.day - 1), 420);
-    });
-    hdr.addEventListener("mouseup", () => clearTimeout(pressTimer));
-    hdr.addEventListener("mouseleave", () => clearTimeout(pressTimer));
+// Long‑press → open editor modal (touch + mouse)
+let pressTimer = null;
+const longPressDelay = 420;
+
+function startPress() {
+  clearTimeout(pressTimer);
+  pressTimer = setTimeout(() => {
+    openDayEditor(day.day - 1);
+  }, longPressDelay);
+}
+
+function cancelPress() {
+  clearTimeout(pressTimer);
+}
+
+// Mouse (desktop)
+hdr.addEventListener("mousedown", startPress);
+hdr.addEventListener("mouseup", cancelPress);
+hdr.addEventListener("mouseleave", cancelPress);
+
+// Touch (mobile)
+hdr.addEventListener("touchstart", startPress, { passive: true });
+hdr.addEventListener("touchend", cancelPress);
+hdr.addEventListener("touchcancel", cancelPress);
+
 
     card.appendChild(hdr);
     card.appendChild(body);
