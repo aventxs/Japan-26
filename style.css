@@ -546,24 +546,168 @@ body.offline #offbadge { display: block; }
 }
 .notes-input::placeholder { color: var(--fog); }
 
-/* ── BOTTOM NAV ── */
+/* ── BOTTOM NAV (iOS‑STYLE) ── */
 .bnav {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--ink2); border-top: 1px solid var(--line);
-  display: flex; justify-content: space-around;
-  padding: 8px 4px 18px; z-index: 100;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(6, 8, 15, 0.96);
+  backdrop-filter: blur(18px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 8px 18px;
+  z-index: 100;
 }
+
 .bntab {
-  background: none; border: none; color: var(--mist);
-  font-size: 10px; font-family: var(--ui);
-  display: flex; flex-direction: column; align-items: center;
-  gap: 3px; cursor: pointer; padding: 4px 10px;
-  border-radius: 10px; transition: all 0.2s;
-  user-select: none; -webkit-user-select: none;
+  background: none;
+  border: none;
+  color: var(--mist);
+  font-family: var(--ui);
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  transition: color 0.18s ease, background 0.18s ease, transform 0.12s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.bntab.active { color: var(--gold); background: rgba(212,168,75,0.1); }
-.bntab:active { transform: scale(0.92); }
-.bni { font-size: 18px; }
+
+.bntab-label {
+  letter-spacing: 0.4px;
+}
+
+.bntab.active {
+  color: var(--gold);
+  background: rgba(212,168,75,0.12);
+}
+
+.bntab:active {
+  transform: scale(0.94);
+}
+
+/* Icon glyphs (pure CSS, no emoji) */
+.bni {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+/* Trip: stylised map pin */
+.bni-trip::before,
+.bni-trip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.bni-trip::before {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  top: 1px;
+}
+.bni-trip::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  top: 5px;
+}
+
+/* Pack: backpack silhouette */
+.bni-pack::before,
+.bni-pack::after {
+  content: "";
+  position: absolute;
+  border-radius: 6px;
+  border: 1.5px solid currentColor;
+}
+.bni-pack::before {
+  width: 14px;
+  height: 12px;
+  top: 4px;
+  left: 3px;
+}
+.bni-pack::after {
+  width: 8px;
+  height: 4px;
+  top: 2px;
+  left: 6px;
+}
+
+/* Budget: card / wallet */
+.bni-budget::before,
+.bni-budget::after {
+  content: "";
+  position: absolute;
+  border-radius: 4px;
+}
+.bni-budget::before {
+  width: 14px;
+  height: 10px;
+  border: 1.5px solid currentColor;
+  top: 5px;
+  left: 3px;
+}
+.bni-budget::after {
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+  top: 7px;
+  left: 6px;
+}
+
+/* Info: circle + “i” */
+.bni-info::before,
+.bni-info::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.bni-info::before {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  top: 3px;
+}
+.bni-info::after {
+  width: 1.5px;
+  height: 6px;
+  background: currentColor;
+  top: 7px;
+  border-radius: 999px;
+}
+
+/* Notes: sheet with line */
+.bni-notes::before,
+.bni-notes::after {
+  content: "";
+  position: absolute;
+  border-radius: 3px;
+}
+.bni-notes::before {
+  width: 12px;
+  height: 14px;
+  border: 1.5px solid currentColor;
+  top: 3px;
+  left: 4px;
+}
+.bni-notes::after {
+  width: 8px;
+  height: 1.5px;
+  background: currentColor;
+  top: 8px;
+  left: 6px;
+}
+
 
 /* ── PETALS ── */
 .petal {
