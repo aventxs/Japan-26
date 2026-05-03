@@ -1,5 +1,5 @@
 /* =========================================================
-   JAPAN'26 — MAIN SCRIPT (FULL REBUILD)
+   JAPAN'26
    ========================================================= */
 
 /* =========================================================
@@ -11,172 +11,7 @@ const BUDGET_LIMIT = 200000;
 const GBP_RATE = 0.0052;
 
 /* =========================================================
-   ITINERARY DATA — 12 DAYS
-   ========================================================= */
-const ITINERARY = [
-  {
-    day: 1,
-    date: "2026-05-09",
-    title: "Arrival in Tokyo",
-    city: "Tokyo",
-    walk: 1,
-    items: [
-      { time: "18:30", name: "Arrive at Haneda Airport (HND)", tags: ["travel"] },
-      { time: "20:00", name: "Check-in at hotel (Akasaka)", tags: ["travel"] },
-      { time: "21:00", name: "Shibuya Crossing & short night walk", tags: ["fun","walk"] },
-      { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
-    ]
-  },
-  {
-    day: 2,
-    date: "2026-05-10",
-    title: "Shinjuku + Drift Tour",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { time: "11:00", name: "Shinjuku exploring (Kabukicho, tech stores)", tags: ["shop","fun"] },
-      { time: "16:00", name: "Rest at hotel", tags: ["rest"] },
-      { time: "17:30", name: "Tokyo Drift / Go-Kart Experience", tags: ["fun","experience"] }
-    ]
-  },
-
-  {
-    day: 3,
-    date: "2026-05-11",
-    title: "Ikebukuro + Harry Potter Studio Tour",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { time: "10:00", name: "Ikebukuro – Animate & anime shops", tags: ["shop","fun"] },
-      { time: "12:00", name: "Travel to Harry Potter Studio Tour", tags: ["travel"] },
-      { time: "13:00", name: "Harry Potter Studio Tour Tokyo", tags: ["fun","experience"] }
-    ]
-  },
-
-  {
-    day: 4,
-    date: "2026-05-12",
-    title: "Shibuya • Harajuku • Mario Kart • Shibuya Sky",
-    city: "Tokyo",
-    walk: 2,
-    items: [
-      { time: "10:30", name: "Shibuya 109 (fashion)", tags: ["shop"] },
-      { time: "11:30", name: "LOFT / lifestyle stores", tags: ["shop"] },
-      { time: "12:00", name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
-      { time: "13:00", name: "Mario Kart Street Tour (Afternoon slot)", tags: ["fun","experience"] },
-      { time: "15:00", name: "Break / explore Shibuya", tags: ["rest"] },
-      { time: "17:30", name: "Shibuya Sky (sunset → night)", tags: ["view","fun"] },
-      { time: "19:30", name: "Gyumon Halal Yakiniku (Dinner)", tags: ["food","halal"] }
-    ]
-  },
-
-  {
-    day: 5,
-    date: "2026-05-13",
-    title: "Tokyo → Kyoto + Fushimi Inari (gentle route)",
-    city: "Kyoto",
-    walk: 2,
-    items: [
-      { time: "09:00", name: "Shinkansen to Kyoto", tags: ["travel"] },
-      { time: "12:00", name: "Hotel check-in / luggage drop", tags: ["travel"] },
-      { time: "14:00", name: "Fushimi Inari (first section only)", tags: ["walk","view"] }
-    ]
-  },
-
-  {
-    day: 6,
-    date: "2026-05-14",
-    title: "Arashiyama + teamLab Biovortex",
-    city: "Kyoto",
-    walk: 2,
-    items: [
-      { time: "09:00", name: "Arashiyama Bamboo Grove (flat path)", tags: ["walk","view"] },
-      { time: "11:00", name: "River cafés (relax)", tags: ["rest","food"] },
-      { time: "18:00", name: "teamLab Biovortex Kyoto", tags: ["fun","experience"] }
-    ]
-  },
-
-  {
-    day: 7,
-    date: "2026-05-15",
-    title: "Kiyomizu-dera → Sannenzaka → Gion",
-    city: "Kyoto",
-    walk: 3,
-    items: [
-      { time: "10:30", name: "Taxi to Kiyomizu-dera", tags: ["travel"] },
-      { time: "11:00", name: "Kiyomizu-dera Temple", tags: ["walk","view"] },
-      { time: "12:30", name: "Downhill Sannenzaka / Ninenzaka", tags: ["walk","shop"] },
-      { time: "17:00", name: "Gion District evening walk", tags: ["walk","view"] }
-    ]
-  },
-   
-  {
-    day: 8,
-    date: "2026-05-16",
-    title: "Kyoto → Osaka + Namba + Dotonbori",
-    city: "Osaka",
-    walk: 2,
-    items: [
-      { time: "10:00", name: "Train to Osaka", tags: ["travel"] },
-      { time: "12:00", name: "Hotel check-in (Namba area)", tags: ["travel"] },
-      { time: "14:00", name: "Namba Yasaka Shrine", tags: ["view"] },
-      { time: "18:00", name: "Dotonbori night walk", tags: ["walk","food","fun"] }
-    ]
-  },
-
-  {
-    day: 9,
-    date: "2026-05-17",
-    title: "Osaka Castle + Umeda Sky",
-    city: "Osaka",
-    walk: 2,
-    items: [
-      { time: "09:00", name: "Osaka Castle (elevator route)", tags: ["view","walk"] },
-      { time: "15:00", name: "Rest / café break", tags: ["rest"] },
-      { time: "18:00", name: "Umeda Sky Building (sunset)", tags: ["view","fun"] }
-    ]
-  },
-
-  {
-    day: 10,
-    date: "2026-05-18",
-    title: "Shinsaibashi + Rinku Premium Outlets",
-    city: "Osaka",
-    walk: 2,
-    items: [
-      { time: "11:00", name: "Shinsaibashi Shopping Street", tags: ["shop"] },
-      { time: "15:00", name: "Rinku Premium Outlets (near KIX)", tags: ["shop","food"] },
-      { time: "21:00", name: "Round 1 Stadium Sennichimae", tags: ["fun"] }
-    ]
-  },
-
-  {
-    day: 11,
-    date: "2026-05-19",
-    title: "Chill Day + Packing",
-    city: "Osaka",
-    walk: 1,
-    items: [
-      { time: "10:00", name: "Free time (arcades, cafés, shopping)", tags: ["fun","rest"] },
-      { time: "18:00", name: "Packing + early night", tags: ["rest"] }
-    ]
-  },
-
-  {
-    day: 12,
-    date: "2026-05-20",
-    title: "Departure from KIX",
-    city: "Osaka",
-    walk: 1,
-    items: [
-      { time: "07:00", name: "Travel to Kansai Airport (KIX)", tags: ["travel"] },
-      { time: "09:30", name: "Flight departure", tags: ["travel"] }
-    ]
-  }
-];
-
-/* =========================================================
-   STATE
+   STATE (progress, packing, budget, notes)
    ========================================================= */
 let state = {
   completed: {},
@@ -185,9 +20,9 @@ let state = {
   notes: ""
 };
 
-const saved = localStorage.getItem("jp26");
-if (saved) {
-  try { state = JSON.parse(saved); }
+const savedState = localStorage.getItem("jp26");
+if (savedState) {
+  try { state = JSON.parse(savedState); }
   catch {}
 }
 
@@ -196,42 +31,188 @@ function saveState() {
 }
 
 /* =========================================================
-   DOM READY
+   ITINERARY — DEFAULT FALLBACK + LOCALSTORAGE SUPPORT
    ========================================================= */
-document.addEventListener("DOMContentLoaded", () => {
-  renderDays();
-  renderRoute();
-  renderPacking();
-  renderBudget();
-  renderInfo();
-  renderTips();
-  renderPhrases();
-  renderNotes();
-  updateProgress();
-  updateCountdown();
-  setupTabs();
-  setupInstallBanner();
-  setupOfflineBadge();
-  setupBudgetAdd();
-});
+let ITINERARY = [];
 
-/* =========================================================
-   TAG CLASS MAP
-   ========================================================= */
-const TAG_CLASS_MAP = {
-  walk: "walk",
-  food: "food",
-  fun: "fun",
-  shop: "shop",
-  halal: "hala"
-};
+function loadItinerary() {
+  const saved = localStorage.getItem("itinerary");
 
-function tagClass(t) {
-  return TAG_CLASS_MAP[t] || "misc";
+  if (saved) {
+    ITINERARY = JSON.parse(saved);
+    return;
+  }
+
+  // Default itinerary (your full 12‑day plan)
+  ITINERARY = [
+    {
+      day: 1,
+      date: "2026-05-09",
+      title: "Arrival in Tokyo",
+      city: "Tokyo",
+      walk: 1,
+      items: [
+        { time: "18:30", name: "Arrive at Haneda Airport (HND)", tags: ["travel"] },
+        { time: "20:00", name: "Check-in at hotel (Akasaka)", tags: ["travel"] },
+        { time: "21:00", name: "Shibuya Crossing & short night walk", tags: ["fun","walk"] },
+        { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
+      ]
+    },
+    {
+      day: 2,
+      date: "2026-05-10",
+      title: "Shinjuku + Drift Tour",
+      city: "Tokyo",
+      walk: 2,
+      items: [
+        { time: "11:00", name: "Shinjuku exploring (Kabukicho, tech stores)", tags: ["shop","fun"] },
+        { time: "16:00", name: "Rest at hotel", tags: ["rest"] },
+        { time: "17:30", name: "Tokyo Drift / Go-Kart Experience", tags: ["fun","experience"] }
+      ]
+    },
+
+    {
+      day: 3,
+      date: "2026-05-11",
+      title: "Ikebukuro + Harry Potter Studio Tour",
+      city: "Tokyo",
+      walk: 2,
+      items: [
+        { time: "10:00", name: "Ikebukuro – Animate & anime shops", tags: ["shop","fun"] },
+        { time: "12:00", name: "Travel to Harry Potter Studio Tour", tags: ["travel"] },
+        { time: "13:00", name: "Harry Potter Studio Tour Tokyo", tags: ["fun","experience"] }
+      ]
+    },
+
+    {
+      day: 4,
+      date: "2026-05-12",
+      title: "Shibuya • Harajuku • Mario Kart • Shibuya Sky",
+      city: "Tokyo",
+      walk: 2,
+      items: [
+        { time: "10:30", name: "Shibuya 109 (fashion)", tags: ["shop"] },
+        { time: "11:30", name: "LOFT / lifestyle stores", tags: ["shop"] },
+        { time: "12:00", name: "Harajuku Takeshita Street", tags: ["shop","walk"] },
+        { time: "13:00", name: "Mario Kart Street Tour (Afternoon slot)", tags: ["fun","experience"] },
+        { time: "15:00", name: "Break / explore Shibuya", tags: ["rest"] },
+        { time: "17:30", name: "Shibuya Sky (sunset → night)", tags: ["view","fun"] },
+        { time: "19:30", name: "Gyumon Halal Yakiniku (Dinner)", tags: ["food","halal"] }
+      ]
+    },
+
+    {
+      day: 5,
+      date: "2026-05-13",
+      title: "Tokyo → Kyoto + Fushimi Inari (gentle route)",
+      city: "Kyoto",
+      walk: 2,
+      items: [
+        { time: "09:00", name: "Shinkansen to Kyoto", tags: ["travel"] },
+        { time: "12:00", name: "Hotel check-in / luggage drop", tags: ["travel"] },
+        { time: "14:00", name: "Fushimi Inari (first section only)", tags: ["walk","view"] }
+      ]
+    },
+
+    {
+      day: 6,
+      date: "2026-05-14",
+      title: "Arashiyama + teamLab Biovortex",
+      city: "Kyoto",
+      walk: 2,
+      items: [
+        { time: "09:00", name: "Arashiyama Bamboo Grove (flat path)", tags: ["walk","view"] },
+        { time: "11:00", name: "River cafés (relax)", tags: ["rest","food"] },
+        { time: "18:00", name: "teamLab Biovortex Kyoto", tags: ["fun","experience"] }
+      ]
+    },
+
+    {
+      day: 7,
+      date: "2026-05-15",
+      title: "Kiyomizu-dera → Sannenzaka → Gion",
+      city: "Kyoto",
+      walk: 3,
+      items: [
+        { time: "10:30", name: "Taxi to Kiyomizu-dera", tags: ["travel"] },
+        { time: "11:00", name: "Kiyomizu-dera Temple", tags: ["walk","view"] },
+        { time: "12:30", name: "Downhill Sannenzaka / Ninenzaka", tags: ["walk","shop"] },
+        { time: "17:00", name: "Gion District evening walk", tags: ["walk","view"] }
+      ]
+    },
+
+    {
+      day: 8,
+      date: "2026-05-16",
+      title: "Kyoto → Osaka + Namba + Dotonbori",
+      city: "Osaka",
+      walk: 2,
+      items: [
+        { time: "10:00", name: "Train to Osaka", tags: ["travel"] },
+        { time: "12:00", name: "Hotel check-in (Namba area)", tags: ["travel"] },
+        { time: "14:00", name: "Namba Yasaka Shrine", tags: ["view"] },
+        { time: "18:00", name: "Dotonbori night walk", tags: ["walk","food","fun"] }
+      ]
+    },
+
+    {
+      day: 9,
+      date: "2026-05-17",
+      title: "Osaka Castle + Umeda Sky",
+      city: "Osaka",
+      walk: 2,
+      items: [
+        { time: "09:00", name: "Osaka Castle (elevator route)", tags: ["view","walk"] },
+        { time: "15:00", name: "Rest / café break", tags: ["rest"] },
+        { time: "18:00", name: "Umeda Sky Building (sunset)", tags: ["view","fun"] }
+      ]
+    },
+
+    {
+      day: 10,
+      date: "2026-05-18",
+      title: "Shinsaibashi + Rinku Premium Outlets",
+      city: "Osaka",
+      walk: 2,
+      items: [
+        { time: "11:00", name: "Shinsaibashi Shopping Street", tags: ["shop"] },
+        { time: "15:00", name: "Rinku Premium Outlets (near KIX)", tags: ["shop","food"] },
+        { time: "21:00", name: "Round 1 Stadium Sennichimae", tags: ["fun"] }
+      ]
+    },
+
+    {
+      day: 11,
+      date: "2026-05-19",
+      title: "Chill Day + Packing",
+      city: "Osaka",
+      walk: 1,
+      items: [
+        { time: "10:00", name: "Free time (arcades, cafés, shopping)", tags: ["fun","rest"] },
+        { time: "18:00", name: "Packing + early night", tags: ["rest"] }
+      ]
+    },
+
+    {
+      day: 12,
+      date: "2026-05-20",
+      title: "Departure from KIX",
+      city: "Osaka",
+      walk: 1,
+      items: [
+        { time: "07:00", name: "Travel to Kansai Airport (KIX)", tags: ["travel"] },
+        { time: "09:30", name: "Flight departure", tags: ["travel"] }
+      ]
+    }
+  ];
+}
+
+function saveItinerary() {
+  localStorage.setItem("itinerary", JSON.stringify(ITINERARY));
 }
 
 /* =========================================================
-   RENDER DAYS
+   RENDER DAYS (Accordion + Completion)
    ========================================================= */
 function formatDate(d) {
   const date = new Date(d);
@@ -290,7 +271,7 @@ function renderDays() {
       act.dataset.key = key;
 
       const tagsHtml = item.tags
-        .map(t => `<div class="act-tag tag-${tagClass(t)}">${t}</div>`)
+        .map(t => `<div class="act-tag tag-${t}">${t}</div>`)
         .join("");
 
       act.innerHTML = `
@@ -309,9 +290,18 @@ function renderDays() {
     inner.appendChild(acts);
     body.appendChild(inner);
 
+    // Tap → accordion
     hdr.addEventListener("click", () => {
       card.classList.toggle("day-open");
     });
+
+    // Long‑press → open editor modal
+    let pressTimer = null;
+    hdr.addEventListener("mousedown", () => {
+      pressTimer = setTimeout(() => openDayEditor(day.day - 1), 420);
+    });
+    hdr.addEventListener("mouseup", () => clearTimeout(pressTimer));
+    hdr.addEventListener("mouseleave", () => clearTimeout(pressTimer));
 
     card.appendChild(hdr);
     card.appendChild(body);
@@ -322,7 +312,7 @@ function renderDays() {
 }
 
 /* =========================================================
-   ACTIVITY TOGGLE
+   ACTIVITY TOGGLE + PROGRESS
    ========================================================= */
 function toggleActivity(key, element, dayNum) {
   state.completed[key] = !state.completed[key];
@@ -341,9 +331,6 @@ function toggleActivity(key, element, dayNum) {
   updateProgress();
 }
 
-/* =========================================================
-   DAY PROGRESS
-   ========================================================= */
 function updateDayProgress(dayNum) {
   const day = ITINERARY.find(d => d.day === dayNum);
   const total = day.items.length;
@@ -362,9 +349,6 @@ function updateDayProgress(dayNum) {
   else card.classList.remove("completed");
 }
 
-/* =========================================================
-   OVERALL PROGRESS
-   ========================================================= */
 function updateProgress() {
   let total = 0;
   let done = 0;
@@ -403,6 +387,156 @@ function updateProgress() {
     dots.appendChild(dot);
   });
 }
+
+let currentEditIndex = null;
+
+/* ---------------------------------------------------------
+   OPEN EDITOR MODAL
+--------------------------------------------------------- */
+function openDayEditor(index) {
+  currentEditIndex = index;
+  const day = ITINERARY[index];
+
+  // Fill inputs
+  document.getElementById("edit-title").value = day.title;
+  document.getElementById("edit-city").value = day.city;
+
+  // Render activities
+  const itemsWrap = document.getElementById("edit-items");
+  itemsWrap.innerHTML = "";
+
+  day.items.forEach((item, idx) => {
+    const row = document.createElement("div");
+    row.className = "edit-item-row";
+    row.dataset.idx = idx;
+
+    row.innerHTML = `
+      <input class="edit-time" value="${item.time}">
+      <input class="edit-name" value="${item.name}">
+      <button class="del-item">×</button>
+    `;
+
+    // Delete activity
+    row.querySelector(".del-item").addEventListener("click", () => {
+      day.items.splice(idx, 1);
+      saveItinerary();
+      openDayEditor(index); // re-render
+    });
+
+    itemsWrap.appendChild(row);
+  });
+
+  document.getElementById("editor-modal").classList.add("show");
+}
+
+/* ---------------------------------------------------------
+   CLOSE MODAL
+--------------------------------------------------------- */
+document.getElementById("modal-close-btn").addEventListener("click", () => {
+  document.getElementById("editor-modal").classList.remove("show");
+});
+
+/* ---------------------------------------------------------
+   SAVE DAY CHANGES
+--------------------------------------------------------- */
+document.getElementById("save-day-btn").addEventListener("click", () => {
+  if (currentEditIndex === null) return;
+
+  const day = ITINERARY[currentEditIndex];
+
+  // Update title + city
+  day.title = document.getElementById("edit-title").value.trim();
+  day.city = document.getElementById("edit-city").value.trim();
+
+  // Update activities
+  const rows = document.querySelectorAll(".edit-item-row");
+  day.items = Array.from(rows).map(row => ({
+    time: row.querySelector(".edit-time").value.trim(),
+    name: row.querySelector(".edit-name").value.trim(),
+    tags: [] // tags preserved later if you want tag editing
+  }));
+
+  saveItinerary();
+  renderDays();
+  updateProgress();
+
+  document.getElementById("editor-modal").classList.remove("show");
+});
+
+/* ---------------------------------------------------------
+   ADD ACTIVITY
+--------------------------------------------------------- */
+document.getElementById("add-item-btn").addEventListener("click", () => {
+  if (currentEditIndex === null) return;
+
+  ITINERARY[currentEditIndex].items.push({
+    time: "—",
+    name: "New Activity",
+    tags: []
+  });
+
+  saveItinerary();
+  openDayEditor(currentEditIndex);
+});
+
+/* ---------------------------------------------------------
+   ADD NEW DAY
+--------------------------------------------------------- */
+document.getElementById("add-day-btn").addEventListener("click", () => {
+  ITINERARY.push({
+    day: ITINERARY.length + 1,
+    date: "2026-05-21",
+    title: "New Day",
+    city: "City",
+    walk: 1,
+    items: []
+  });
+
+  saveItinerary();
+  renderDays();
+  openDayEditor(ITINERARY.length - 1);
+});
+
+/* ---------------------------------------------------------
+   DELETE DAY
+--------------------------------------------------------- */
+document.getElementById("delete-day-btn").addEventListener("click", () => {
+  if (currentEditIndex === null) return;
+
+  if (!confirm("Delete this day?")) return;
+
+  ITINERARY.splice(currentEditIndex, 1);
+
+  // Re-number days
+  ITINERARY.forEach((d, i) => d.day = i + 1);
+
+  saveItinerary();
+  renderDays();
+  updateProgress();
+
+  document.getElementById("editor-modal").classList.remove("show");
+});
+
+/* =========================================================
+   DOM READY
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadItinerary();
+  renderDays();
+  renderRoute();
+  renderPacking();
+  renderBudget();
+  renderInfo();
+  renderTips();
+  renderPhrases();
+  renderNotes();
+  updateProgress();
+  updateCountdown();
+  setupTabs();
+  setupInstallBanner();
+  setupOfflineBadge();
+  setupBudgetAdd();
+});
 
 /* =========================================================
    ROUTE BAR
@@ -762,7 +896,7 @@ function renderNotes() {
 const petalBtn = document.getElementById("petal-btn");
 if (petalBtn) {
   petalBtn.addEventListener("click", () => {
-    const count = 26; // nice touch for Japan'26
+    const count = 26;
     for (let i = 0; i < count; i++) spawnPetalV2();
   });
 }
@@ -771,11 +905,11 @@ function spawnPetalV2() {
   const p = document.createElement("div");
   p.className = "petal";
 
-  const startX = Math.random() * 100;              // vw
-  const drift = (Math.random() * 40 - 20) + "vw";  // -20vw to +20vw
-  const duration = 5 + Math.random() * 4;          // 5–9s
-  const delay = Math.random() * 0.8;               // slight staggering
-  const scale = 0.7 + Math.random() * 0.8;         // 0.7–1.5
+  const startX = Math.random() * 100;
+  const drift = (Math.random() * 40 - 20) + "vw";
+  const duration = 5 + Math.random() * 4;
+  const delay = Math.random() * 0.8;
+  const scale = 0.7 + Math.random() * 0.8;
 
   p.style.left = startX + "vw";
   p.style.setProperty("--drift-x", drift);
@@ -789,7 +923,7 @@ function spawnPetalV2() {
 }
 
 /* =========================================================
-   RESET BUTTON (↺ NEW)
+   RESET BUTTON
    ========================================================= */
 const resetBtn = document.getElementById("reset-btn");
 if (resetBtn) {
