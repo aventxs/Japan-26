@@ -215,6 +215,7 @@ Halal near Shinjuku:
     <div class="modal-sheet">
       <div class="modal-drag-handle"></div>
 
+```
   <div class="modal-header">
     <div class="modal-title">✏️ Edit Day</div>
     <button class="modal-close-btn" id="modal-close-btn">✕</button>
@@ -236,40 +237,40 @@ Halal near Shinjuku:
     <button id="delete-day-btn" class="modal-btn modal-btn-danger">Delete This Day</button>
   </div>
 </div>
-</div>
+```
 
-  <!-- BOTTOM NAV -->
-<nav class="bnav" id="bnav">
-  <button class="bntab active" data-view="trip">
-    <span class="bni bni-trip"></span>
-    <span class="bntab-label">Trip</span>
-  </button>
-  <button class="bntab" data-view="pack">
-    <span class="bni bni-pack"></span>
-    <span class="bntab-label">Pack</span>
-  </button>
-  <button class="bntab" data-view="budget">
-    <span class="bni bni-budget"></span>
-    <span class="bntab-label">Budget</span>
-  </button>
-  <button class="bntab" data-view="info">
-    <span class="bni bni-info"></span>
-    <span class="bntab-label">Info</span>
-  </button>
-  <button class="bntab" data-view="notes">
-    <span class="bni bni-notes"></span>
-    <span class="bntab-label">Notes</span>
-  </button>
-</nav>
+  </div>
 
+  <!-- ── BOTTOM NAV ── -->
 
-  <!-- MAIN SCRIPT -->
+  <nav class="bnav" id="bnav">
+    <button class="bntab active" data-view="trip">
+      <span class="bni">🗾</span>
+      <span class="bntab-label">Trip</span>
+    </button>
+    <button class="bntab" data-view="pack">
+      <span class="bni">🎒</span>
+      <span class="bntab-label">Pack</span>
+    </button>
+    <button class="bntab" data-view="budget">
+      <span class="bni">💴</span>
+      <span class="bntab-label">Budget</span>
+    </button>
+    <button class="bntab" data-view="info">
+      <span class="bni">⛩</span>
+      <span class="bntab-label">Info</span>
+    </button>
+    <button class="bntab" data-view="notes">
+      <span class="bni">✍🏽</span>
+      <span class="bntab-label">Notes</span>
+    </button>
+  </nav>
+
   <script src="script.js"></script>
 
-  <!-- SERVICE WORKER -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(()=>{});
+      navigator.serviceWorker.register('sw.js').catch(function(){});
     }
   </script>
 
