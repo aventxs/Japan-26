@@ -27,7 +27,7 @@ const ITINERARY = [
       { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
     ]
   },
-    {
+  {
     day: 2,
     date: "2026-05-10",
     title: "Shinjuku + Drift Tour",
@@ -296,9 +296,9 @@ function renderDays() {
       act.innerHTML = `
         <div class="act-chk">${done ? "✓" : ""}</div>
         <div class="act-body">
-        <div class="act-time">${item.time}</div>
-        <div class="act-name">${item.name}</div>
-        <div class="act-tags">${tagsHtml}</div>
+          <div class="act-time">${item.time}</div>
+          <div class="act-name">${item.name}</div>
+          <div class="act-tags">${tagsHtml}</div>
         </div>
       `;
 
@@ -585,7 +585,7 @@ function renderBudgetEntries() {
 
     row.querySelector(".budget-del").addEventListener("click", () => {
       const idx = Number(row.querySelector(".budget-del").dataset.index);
-      state.budget.splice(idx, 1);      // delete by index (works for old + new)
+      state.budget.splice(idx, 1);
       saveState();
       renderBudgetEntries();
       updateBudgetTotals();
@@ -627,7 +627,7 @@ function setupBudgetAdd() {
     }
 
     state.budget.push({
-      id: Date.now(),                 // new entries get an id
+      id: Date.now(),
       desc,
       amt,
       cat: catEl.textContent
@@ -642,7 +642,6 @@ function setupBudgetAdd() {
     showToast("Expense added");
   });
 }
-
 
 /* =========================================================
    INFO CARDS
@@ -772,11 +771,11 @@ function spawnPetalV2() {
   const p = document.createElement("div");
   p.className = "petal";
 
-  const startX = Math.random() * 100;          // vw
-  const drift = (Math.random() * 40 - 20) + "vw"; // -20vw to +20vw
-  const duration = 5 + Math.random() * 4;      // 5–9s
-  const delay = Math.random() * 0.8;           // slight staggering
-  const scale = 0.7 + Math.random() * 0.8;     // 0.7–1.5
+  const startX = Math.random() * 100;              // vw
+  const drift = (Math.random() * 40 - 20) + "vw";  // -20vw to +20vw
+  const duration = 5 + Math.random() * 4;          // 5–9s
+  const delay = Math.random() * 0.8;               // slight staggering
+  const scale = 0.7 + Math.random() * 0.8;         // 0.7–1.5
 
   p.style.left = startX + "vw";
   p.style.setProperty("--drift-x", drift);
@@ -788,7 +787,6 @@ function spawnPetalV2() {
   document.body.appendChild(p);
   setTimeout(() => p.remove(), (duration + delay) * 1000 + 500);
 }
-
 
 /* =========================================================
    RESET BUTTON (↺ NEW)
