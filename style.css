@@ -707,6 +707,32 @@ body.offline #offbadge { display: block; }
   top: 8px;
   left: 6px;
 }
+.ibtn {
+  background: var(--card2);
+  border: 1px solid var(--line);
+  padding: 7px 10px;
+  border-radius: var(--rsm);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  user-select: none;
+  -webkit-user-select: none;
+  color: var(--snow);
+}
+
+.ibtn-ghost {
+  background: rgba(15,20,32,0.7);
+  border-radius: 999px;
+  padding-inline: 12px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+.ibtn:active {
+  transform: scale(0.94);
+  background: var(--lift);
+}
+
 
 
 /* ── PETALS ── */
