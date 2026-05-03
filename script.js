@@ -758,26 +758,35 @@ function renderNotes() {
 }
 
 /* =========================================================
-   PETALS ANIMATION (🌸 FIXED)
+   PETALS ANIMATION (V2)
    ========================================================= */
 const petalBtn = document.getElementById("petal-btn");
 if (petalBtn) {
   petalBtn.addEventListener("click", () => {
-    for (let i = 0; i < 18; i++) spawnPetal();
+    const count = 26; // nice touch for Japan'26
+    for (let i = 0; i < count; i++) spawnPetalV2();
   });
 }
 
-function spawnPetal() {
+function spawnPetalV2() {
   const p = document.createElement("div");
   p.className = "petal";
 
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = 4 + Math.random() * 3 + "s";
-  p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999; // ← REQUIRED
+  const startX = Math.random() * 100;          // vw
+  const drift = (Math.random() * 40 - 20) + "vw"; // -20vw to +20vw
+  const duration = 5 + Math.random() * 4;      // 5–9s
+  const delay = Math.random() * 0.8;           // slight staggering
+  const scale = 0.7 + Math.random() * 0.8;     // 0.7–1.5
+
+  p.style.left = startX + "vw";
+  p.style.setProperty("--drift-x", drift);
+  p.style.animationDuration = duration + "s";
+  p.style.animationDelay = delay + "s";
+  p.style.transform = `scale(${scale})`;
+  p.style.zIndex = 9999;
 
   document.body.appendChild(p);
-  setTimeout(() => p.remove(), 7000);
+  setTimeout(() => p.remove(), (duration + delay) * 1000 + 500);
 }
 
 
