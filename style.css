@@ -787,6 +787,10 @@ body.offline #offbadge { display: block; }
   align-items: flex-end;
   justify-content: center;
   z-index: 99999;
+  align-items: flex-end; /* ensures modal sits at bottom */
+  padding-top: env(safe-area-inset-top);
+}
+
 }
 .modal.show {
   display: flex;
