@@ -779,9 +779,7 @@ body.offline #offbadge { display: block; }
   align-items: flex-end;
   justify-content: center;
   z-index: 99999;
-  align-items: flex-end; /* ensures modal sits at bottom */
   padding-top: env(safe-area-inset-top);
-}
 
 }
 .modal.show {
@@ -790,10 +788,11 @@ body.offline #offbadge { display: block; }
 
 .modal-sheet {
   width: 100%;
-  height: calc(100dvh - 20px); /* iOS‑safe height */
-  max-height: calc(100dvh - 20px);
+  max-width: 480px;
+  margin: 0 auto;
 
-  background: rgba(15,20,32,0.92);
+  max-height: min(640px, calc(100dvh - 24px));
+  background: rgba(15,20,32,0.96);
   backdrop-filter: blur(22px);
 
   border-radius: 22px 22px 0 0;
@@ -801,7 +800,6 @@ body.offline #offbadge { display: block; }
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-
   padding-bottom: env(safe-area-inset-bottom);
 
   display: flex;
@@ -809,6 +807,7 @@ body.offline #offbadge { display: block; }
 
   animation: modalSlideUp 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
 
 @keyframes modalSlideUp {
   from { transform: translateY(40px); opacity: 0; }
