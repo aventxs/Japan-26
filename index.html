@@ -3,50 +3,35 @@
 <head>
   <meta charset="UTF-8">
 
-  <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <!-- Theme -->
   <meta name="theme-color" content="#06080f">
 
-  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Japan'26">
 
-  <!-- Title -->
   <title>Japan'26</title>
 
-  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-  <!-- iOS Home Screen Icon -->
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- Offline Badge -->
-  <div id="offbadge">✈ Offline</div>
-
-  <!-- Toast -->
+  <div id="offbadge">Offline</div>
   <div id="toast"></div>
 
-  <!-- SPLASH SCREEN -->
+  <!-- SPLASH -->
   <div id="splash">
     <svg class="splash-kamon" viewBox="0 0 100 100">
       <g opacity=".9">
-        <!-- 16 rotating petals -->
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(0 50 50)"/>
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(22.5 50 50)"/>
         <ellipse cx="50" cy="22" rx="4.5" ry="11" fill="#d4a84b" transform="rotate(45 50 50)"/>
@@ -69,6 +54,7 @@
     </svg>
 
     <div class="splash-title">日本旅行</div>
+    <div class="splash-sub">Japan Travel Planner</div>
 
     <div class="splash-dots">
       <div class="splash-dot"></div>
@@ -77,26 +63,25 @@
     </div>
   </div>
 
-  <!-- APP WRAPPER -->
+  <!-- APP -->
   <div id="app">
 
     <!-- HEADER -->
     <div class="hdr">
       <div class="hdr-brand">
         <div class="hdr-jp">日本旅行</div>
-        <div class="hdr-sub" id="hdr-sub">Japan Planner</div>
+        <div class="hdr-sub">Japan Planner</div>
       </div>
 
       <div class="hdr-right">
-        <div class="ibtn" id="petal-btn">🌸</div>
-        <div class="ibtn" id="reset-btn">↺</div>
+        <div class="ibtn" id="petal-btn">Bloom</div>
+        <div class="ibtn" id="reset-btn">Reset</div>
       </div>
     </div>
 
     <!-- INSTALL BANNER -->
     <div id="install-banner">
-      <span style="font-size:22px">📲</span>
-      <p><strong>Install as App</strong><br>Offline access on your trip — no signal needed</p>
+      <p><strong>Install as App</strong><br>Offline access on your trip</p>
       <button class="inst-btn" id="install-btn">Add</button>
     </div>
 
@@ -128,8 +113,8 @@
         </div>
 
         <div class="prog-info">
-          <div class="prog-title" id="prog-title">Your journey awaits 🌸</div>
-          <div class="prog-sub" id="prog-sub">Tap activities to log them as complete.</div>
+          <div class="prog-title">Your journey awaits</div>
+          <div class="prog-sub">Tap activities to log them as complete.</div>
           <div class="day-dots" id="day-dots"></div>
         </div>
       </div>
@@ -142,15 +127,7 @@
       <div class="scroll-end">· · ·</div>
     </div>
 
-    <!-- DAY VIEW -->
-    <div class="view" id="view-day">
-      <div class="slabel">Day Details</div>
-      <div id="day-header"></div>
-      <div id="day-items"></div>
-      <div class="scroll-end">· · ·</div>
-    </div>
-
-    <!-- PACKING VIEW -->
+    <!-- PACK VIEW -->
     <div class="view" id="view-pack">
       <div class="slabel">Packing List</div>
       <div class="pack-wrap" id="pack-container"></div>
@@ -196,11 +173,7 @@
 
       <div class="slabel">Expenses</div>
       <div class="budget-card">
-        <div class="budget-entries" id="budget-entries">
-          <div style="font-size:12px;color:var(--mist);text-align:center;padding:20px 0">
-            No expenses yet. Start logging!
-          </div>
-        </div>
+        <div class="budget-entries" id="budget-entries"></div>
       </div>
 
       <div class="scroll-end">· · ·</div>
@@ -226,18 +199,14 @@
 
       <div class="notes-card">
         <div class="notes-hdr">
-          <span>✍🏽 Saved automatically</span>
+          <span>Saved automatically</span>
           <span class="notes-saved" id="notes-saved">Saved ✓</span>
         </div>
 
         <textarea
           class="notes-input"
           id="notes-ta"
-          placeholder="Confirmation codes, reminders, phrases…
-
-e.g. Hotel: Akasaka — code #XXXX
-Departure: 08 May, Haneda → Tokyo
-Return: 20 May, KIX 09:30"
+          placeholder="Confirmation codes, reminders, phrases…"
         ></textarea>
       </div>
 
@@ -246,39 +215,69 @@ Return: 20 May, KIX 09:30"
 
   </div>
 
-  <!-- BOTTOM NAV -->
+  <!-- NAV -->
   <nav class="bnav" id="bnav">
-  <button class="bntab active" data-view="trip">
-    <span class="bni bni-trip"></span>
-    <span class="bntab-label">Trip</span>
-  </button>
+    <button class="bntab active" data-view="trip">
+      <span class="bni bni-trip"></span>
+      <span class="bntab-label">Trip</span>
+    </button>
 
-  <button class="bntab" data-view="pack">
-    <span class="bni bni-pack"></span>
-    <span class="bntab-label">Pack</span>
-  </button>
+    <button class="bntab" data-view="pack">
+      <span class="bni bni-pack"></span>
+      <span class="bntab-label">Pack</span>
+    </button>
 
-  <button class="bntab" data-view="budget">
-    <span class="bni bni-budget"></span>
-    <span class="bntab-label">Budget</span>
-  </button>
+    <button class="bntab" data-view="budget">
+      <span class="bni bni-budget"></span>
+      <span class="bntab-label">Budget</span>
+    </button>
 
-  <button class="bntab" data-view="info">
-    <span class="bni bni-info"></span>
-    <span class="bntab-label">Info</span>
-  </button>
+    <button class="bntab" data-view="info">
+      <span class="bni bni-info"></span>
+      <span class="bntab-label">Info</span>
+    </button>
 
-  <button class="bntab" data-view="notes">
-    <span class="bni bni-notes"></span>
-    <span class="bntab-label">Notes</span>
-  </button>
-</nav>
+    <button class="bntab" data-view="notes">
+      <span class="bni bni-notes"></span>
+      <span class="bntab-label">Notes</span>
+    </button>
+  </nav>
 
+  <!-- EDITOR MODAL -->
+  <div class="modal" id="editor-modal">
+    <div class="modal-sheet">
 
-  <!-- MAIN SCRIPT -->
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-sakura"></div>
+          <div class="modal-title">Edit Day</div>
+        </div>
+        <button class="modal-close-btn" id="modal-close-btn">×</button>
+        <div class="modal-header-accent"></div>
+      </div>
+
+      <div class="modal-body">
+
+        <label class="modal-label">Title</label>
+        <input id="edit-title" class="modal-input">
+
+        <label class="modal-label">City</label>
+        <input id="edit-city" class="modal-input">
+
+        <label class="modal-label">Activities</label>
+        <div id="edit-items" class="modal-items"></div>
+
+        <button id="add-item-btn" class="modal-fab">+ Add Activity</button>
+
+        <button id="save-day-btn" class="modal-save-btn">Save Changes</button>
+
+      </div>
+
+    </div>
+  </div>
+
   <script src="script.js"></script>
 
-  <!-- SERVICE WORKER -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(()=>{});
