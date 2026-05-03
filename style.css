@@ -735,24 +735,34 @@ body.offline #offbadge { display: block; }
 
 
 
-/* ── PETALS ── */
+/* ── PETALS V2 ── */
 .petal {
   position: fixed;
-  top: -20px;
-  width: 14px;
-  height: 22px;
-  background: #ffd6e8;
-  border-radius: 70% 70% 100% 100%;
-  transform-origin: center;
-  opacity: 0.9;
+  top: -24px;
+  width: 16px;
+  height: 24px;
+  background: radial-gradient(circle at 30% 20%, #ffe9f4 0, #ffb7d6 40%, #f28ab5 100%);
+  border-radius: 70% 40% 80% 60%;
+  opacity: 0.85;
   pointer-events: none;
-  animation: fall linear forwards;
-  z-index: 2147483647;
+  animation: petal-fall linear forwards;
+  will-change: transform, opacity;
 }
 
-@keyframes fall {
-  to { transform: translateY(110vh) rotate(480deg); opacity: 0; }
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotateZ(0deg) rotateY(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate3d(var(--drift-x), 110vh, 0) rotateZ(480deg) rotateY(180deg);
+    opacity: 0;
+  }
 }
+
 
 /* ── SCROLL END ── */
 .scroll-end { text-align: center; padding: 16px 0 36px; color: var(--fog); font-size: 16px; letter-spacing: 4px; }
