@@ -270,6 +270,8 @@ function renderDays() {
         </div>
       </div>
       <div class="dc-chevron">⌄</div>
+      <div class="dc-edit" data-day="${day.day}">✎</div>
+
     `;
 
     const body = document.createElement("div");
