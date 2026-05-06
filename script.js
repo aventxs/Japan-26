@@ -318,6 +318,13 @@ function renderDays() {
     card.appendChild(hdr);
     card.appendChild(body);
     wrap.appendChild(card);
+    
+    // Attach edit button listener
+const editBtn = hdr.querySelector(".dc-edit");
+editBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent accordion toggle
+  openEditModal(day.day);
+});
 
     updateDayProgress(day.day);
   });
@@ -876,3 +883,113 @@ function showToast(msg) {
 
   setTimeout(() => t.classList.remove("show"), 1800);
 }
+
+/* =========================================================
+   EDITOR MODAL LOGIC
+   ========================================================= */
+
+let currentEditDay = null;
+
+function openEditModal(dayNum) {
+  currentEditDay = dayNum;
+
+  const day = ITINERARY.find(d => d.day === dayNum);
+  const container = document.getElementById("edit-activities");
+  container.innerHTML = "";
+
+  day.items.forEach((item, idx) => {
+    const row = document.createElement("div");
+    row.className = "edit-row";
+    row.dataset.index = idx;
+
+    row.innerHTML = `
+      <div class="edit-drag">⋮⋮</div>
+      <input class="edit-time" value="${item.time}">
+      <input class="edit-name" value="${item.name}">
+      <div class="edit-del">Delete</div>
+    `;
+
+    // Delete
+    row.querySelector(".edit-del").addEventListener("click", () => {
+      day.items.splice(idx, 1);
+      openEditModal(dayNum);
+    });
+
+    container.appendChild(row);
+  });
+
+  // Enable drag sorting
+  enableDragSort(container);
+
+  document.getElementById("edit-modal").classList.add("show");
+}
+
+document.getElementById("edit-close").addEventListener("click", () => {
+  document.getElementById("edit-modal").classList.remove("show");
+});
+
+document.getElementById("edit-add-btn").addEventListener("click", () => {
+  const day = ITINERARY.find(d => d.day === currentEditDay);
+  day.items.push({ time: "00:00", name: "New Activity", tags: ["misc"] });
+  openEditModal(currentEditDay);
+});
+
+document.getElementById("edit-save-btn").addEventListener("click", () => {
+  const day = ITINERARY.find(d => d.day === currentEditDay);
+  const rows = document.querySelectorAll("#edit-activities .edit-row");
+
+  const newItems = [];
+  rows.forEach(r => {
+    const time = r.querySelector(".edit-time").value.trim();
+    const name = r.querySelector(".edit-name").value.trim();
+    const idx = Number(r.dataset.index);
+
+    const old = day.items[idx];
+    newItems.push({
+      time,
+      name,
+      tags: old.tags
+    });
+  });
+
+  day.items = newItems;
+
+  saveState();
+  renderDays();
+  updateProgress();
+
+  document.getElementById("edit-modal").classList.remove("show");
+  showToast("Itinerary updated");
+});
+
+/* =========================================================
+   DRAG SORT
+   ========================================================= */
+function enableDragSort(container) {
+  let dragging = null;
+
+  container.querySelectorAll(".edit-row").forEach(row => {
+    row.draggable = true;
+
+    row.addEventListener("dragstart", () => {
+      dragging = row;
+      row.style.opacity = "0.4";
+    });
+
+    row.addEventListener("dragend", () => {
+      row.style.opacity = "1";
+      dragging = null;
+    });
+
+    row.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const target = e.target.closest(".edit-row");
+      if (target && target !== dragging) {
+        const rect = target.getBoundingClientRect();
+        const next = (e.clientY - rect.top) / rect.height > 0.5;
+        container.insertBefore(dragging, next ? target.nextSibling : target);
+      }
+    });
+  });
+}
+
