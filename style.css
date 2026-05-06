@@ -583,3 +583,154 @@ body.offline #offbadge { display: block; }
   #app { max-width: 480px; margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
   .bnav { max-width: 480px; left: 50%; transform: translateX(-50%); }
 }
+
+/* =========================================================
+   EDIT ITINERARY MODAL (FULL-SCREEN)
+   ========================================================= */
+
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 99999;
+}
+
+.edit-modal.show {
+  display: flex;
+}
+
+.edit-sheet {
+  width: 100%;
+  max-height: 100dvh;
+  background: rgba(15,20,32,0.96);
+  border-radius: 22px 22px 0 0;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+.edit-header {
+  padding: 18px 20px 14px;
+  background: rgba(15,20,32,0.96);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--snow);
+}
+
+.edit-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--mist);
+  cursor: pointer;
+}
+
+/* BODY */
+.edit-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 18px 40px;
+}
+
+/* ACTIVITY EDIT ROW */
+.edit-row {
+  background: var(--card2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-row input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--snow);
+  font-size: 13px;
+}
+
+.edit-row input:focus {
+  border-color: var(--gold);
+}
+
+/* DELETE BUTTON */
+.edit-del {
+  background: rgba(200,55,45,0.15);
+  color: var(--seal);
+  border: 1px solid rgba(200,55,45,0.3);
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ADD + SAVE BUTTONS */
+.edit-add-btn,
+.edit-save-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.edit-add-btn {
+  background: var(--lift);
+  color: var(--snow);
+  border: 1px solid var(--line);
+}
+
+.edit-save-btn {
+  background: var(--gold);
+  color: #000;
+}
+
+/* DRAG HANDLE */
+.edit-drag {
+  font-size: 18px;
+  color: var(--mist);
+  cursor: grab;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+/* =========================================================
+   DAY HEADER EDIT ICON (✎)
+   ========================================================= */
+
+.dc-edit {
+  font-size: 14px;
+  color: var(--mist);
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.dc-edit:active {
+  transform: scale(0.9);
+}
