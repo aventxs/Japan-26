@@ -185,6 +185,7 @@ body.offline #offbadge { display: block; }
 }
 .slabel::after { content: ''; flex: 1; height: 1px; background: var(--line); }
 
+
 /* ── COUNTDOWN ── */
 .countdown {
   background: linear-gradient(135deg, rgba(212,168,75,0.1), rgba(232,160,176,0.05));
