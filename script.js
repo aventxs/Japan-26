@@ -1,5 +1,5 @@
 /* =========================================================
-   JAPAN'26 — MAIN SCRIPT (FULL REBUILD)
+   JAPAN'26 — MAIN SCRIPT
    ========================================================= */
 
 /* =========================================================
@@ -27,7 +27,7 @@ const ITINERARY = [
       { time: "21:30", name: "Dinner (halal-friendly options)", tags: ["food","halal"] }
     ]
   },
-    {
+  {
     day: 2,
     date: "2026-05-10",
     title: "Shinjuku + Drift Tour",
@@ -269,9 +269,8 @@ function renderDays() {
           <div class="dc-progress-fill" id="dc-prog-${day.day}"></div>
         </div>
       </div>
-      <div class="dc-chevron">⌄</div>
       <div class="dc-edit" data-day="${day.day}">✎</div>
-
+      <div class="dc-chevron">⌄</div>
     `;
 
     const body = document.createElement("div");
@@ -298,9 +297,9 @@ function renderDays() {
       act.innerHTML = `
         <div class="act-chk">${done ? "✓" : ""}</div>
         <div class="act-body">
-        <div class="act-time">${item.time}</div>
-        <div class="act-name">${item.name}</div>
-        <div class="act-tags">${tagsHtml}</div>
+          <div class="act-time">${item.time}</div>
+          <div class="act-name">${item.name}</div>
+          <div class="act-tags">${tagsHtml}</div>
         </div>
       `;
 
@@ -311,20 +310,21 @@ function renderDays() {
     inner.appendChild(acts);
     body.appendChild(inner);
 
-    hdr.addEventListener("click", () => {
+    hdr.addEventListener("click", (e) => {
+      // ignore clicks on edit button
+      if (e.target.closest(".dc-edit")) return;
       card.classList.toggle("day-open");
+    });
+
+    const editBtn = hdr.querySelector(".dc-edit");
+    editBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openEditModal(day.day);
     });
 
     card.appendChild(hdr);
     card.appendChild(body);
     wrap.appendChild(card);
-    
-    // Attach edit button listener
-const editBtn = hdr.querySelector(".dc-edit");
-editBtn.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent accordion toggle
-  openEditModal(day.day);
-});
 
     updateDayProgress(day.day);
   });
@@ -489,54 +489,22 @@ function renderPacking() {
   const wrap = document.getElementById("pack-container");
   wrap.innerHTML = "";
 
-  Object.keys(state.packing).forEach((key, idx) => {
-    const item = state.packing[key];
+  PACKING_ITEMS.forEach((item, idx) => {
+    const key = `p-${idx}`;
+    const done = !!state.packing[key];
 
     const row = document.createElement("div");
-    row.className = "pack-item" + (item.done ? " done" : "");
+    row.className = "pack-item" + (done ? " done" : "");
     row.dataset.key = key;
 
     row.innerHTML = `
-      <div class="pack-name" contenteditable="true">${item.name}</div>
-      <div class="pack-check">${item.done ? "✓" : ""}</div>
-      <div class="pack-del">✕</div>
+      <div class="pack-name">${item}</div>
+      <div class="pack-check">${done ? "✓" : ""}</div>
     `;
 
-    // Toggle done
-    row.querySelector(".pack-check").addEventListener("click", () => {
-      item.done = !item.done;
-      saveState();
-      renderPacking();
-    });
-
-    // Delete
-    row.querySelector(".pack-del").addEventListener("click", () => {
-      delete state.packing[key];
-      saveState();
-      renderPacking();
-    });
-
-    // Edit name
-    row.querySelector(".pack-name").addEventListener("input", (e) => {
-      item.name = e.target.textContent.trim();
-      saveState();
-    });
-
+    row.addEventListener("click", () => togglePack(key, row));
     wrap.appendChild(row);
   });
-
-  // Add button
-  const addBtn = document.createElement("button");
-  addBtn.className = "edit-add-btn";
-  addBtn.textContent = "+ Add Item";
-  addBtn.addEventListener("click", () => {
-    const id = "p-" + Date.now();
-    state.packing[id] = { name: "New Item", done: false };
-    saveState();
-    renderPacking();
-  });
-
-  wrap.appendChild(addBtn);
 }
 
 function togglePack(key, row) {
@@ -626,7 +594,7 @@ function renderBudgetEntries() {
 
     row.querySelector(".budget-del").addEventListener("click", () => {
       const idx = Number(row.querySelector(".budget-del").dataset.index);
-      state.budget.splice(idx, 1);      // delete by index (works for old + new)
+      state.budget.splice(idx, 1);
       saveState();
       renderBudgetEntries();
       updateBudgetTotals();
@@ -668,7 +636,7 @@ function setupBudgetAdd() {
     }
 
     state.budget.push({
-      id: Date.now(),                 // new entries get an id
+      id: Date.now(),
       desc,
       amt,
       cat: catEl.textContent
@@ -683,7 +651,6 @@ function setupBudgetAdd() {
     showToast("Expense added");
   });
 }
-
 
 /* =========================================================
    INFO CARDS
@@ -811,7 +778,7 @@ function renderNotes() {
 }
 
 /* =========================================================
-   PETALS ANIMATION (🌸 FIXED)
+   PETALS ANIMATION
    ========================================================= */
 const petalBtn = document.getElementById("petal-btn");
 if (petalBtn) {
@@ -827,15 +794,14 @@ function spawnPetal() {
   p.style.left = Math.random() * 100 + "vw";
   p.style.animationDuration = 4 + Math.random() * 3 + "s";
   p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999; // ← REQUIRED
+  p.style.zIndex = 9999;
 
   document.body.appendChild(p);
   setTimeout(() => p.remove(), 7000);
 }
 
-
 /* =========================================================
-   RESET BUTTON (↺ NEW)
+   RESET BUTTON
    ========================================================= */
 const resetBtn = document.getElementById("reset-btn");
 if (resetBtn) {
@@ -931,7 +897,6 @@ function showToast(msg) {
 /* =========================================================
    EDITOR MODAL LOGIC
    ========================================================= */
-
 let currentEditDay = null;
 
 function openEditModal(dayNum) {
@@ -953,7 +918,6 @@ function openEditModal(dayNum) {
       <div class="edit-del">Delete</div>
     `;
 
-    // Delete
     row.querySelector(".edit-del").addEventListener("click", () => {
       day.items.splice(idx, 1);
       openEditModal(dayNum);
@@ -962,49 +926,57 @@ function openEditModal(dayNum) {
     container.appendChild(row);
   });
 
-  // Enable drag sorting
   enableDragSort(container);
 
   document.getElementById("edit-modal").classList.add("show");
 }
 
-document.getElementById("edit-close").addEventListener("click", () => {
-  document.getElementById("edit-modal").classList.remove("show");
-});
-
-document.getElementById("edit-add-btn").addEventListener("click", () => {
-  const day = ITINERARY.find(d => d.day === currentEditDay);
-  day.items.push({ time: "00:00", name: "New Activity", tags: ["misc"] });
-  openEditModal(currentEditDay);
-});
-
-document.getElementById("edit-save-btn").addEventListener("click", () => {
-  const day = ITINERARY.find(d => d.day === currentEditDay);
-  const rows = document.querySelectorAll("#edit-activities .edit-row");
-
-  const newItems = [];
-  rows.forEach(r => {
-    const time = r.querySelector(".edit-time").value.trim();
-    const name = r.querySelector(".edit-name").value.trim();
-    const idx = Number(r.dataset.index);
-
-    const old = day.items[idx];
-    newItems.push({
-      time,
-      name,
-      tags: old.tags
-    });
+const editCloseBtn = document.getElementById("edit-close");
+if (editCloseBtn) {
+  editCloseBtn.addEventListener("click", () => {
+    document.getElementById("edit-modal").classList.remove("show");
   });
+}
 
-  day.items = newItems;
+const editAddBtn = document.getElementById("edit-add-btn");
+if (editAddBtn) {
+  editAddBtn.addEventListener("click", () => {
+    const day = ITINERARY.find(d => d.day === currentEditDay);
+    day.items.push({ time: "00:00", name: "New Activity", tags: ["misc"] });
+    openEditModal(currentEditDay);
+  });
+}
 
-  saveState();
-  renderDays();
-  updateProgress();
+const editSaveBtn = document.getElementById("edit-save-btn");
+if (editSaveBtn) {
+  editSaveBtn.addEventListener("click", () => {
+    const day = ITINERARY.find(d => d.day === currentEditDay);
+    const rows = document.querySelectorAll("#edit-activities .edit-row");
 
-  document.getElementById("edit-modal").classList.remove("show");
-  showToast("Itinerary updated");
-});
+    const newItems = [];
+    rows.forEach(r => {
+      const time = r.querySelector(".edit-time").value.trim();
+      const name = r.querySelector(".edit-name").value.trim();
+      const idx = Number(r.dataset.index);
+
+      const old = day.items[idx] || { tags: ["misc"] };
+      newItems.push({
+        time: time || old.time,
+        name: name || old.name,
+        tags: old.tags
+      });
+    });
+
+    day.items = newItems;
+
+    saveState();
+    renderDays();
+    updateProgress();
+
+    document.getElementById("edit-modal").classList.remove("show");
+    showToast("Itinerary updated");
+  });
+}
 
 /* =========================================================
    DRAG SORT
@@ -1028,12 +1000,11 @@ function enableDragSort(container) {
     row.addEventListener("dragover", (e) => {
       e.preventDefault();
       const target = e.target.closest(".edit-row");
-      if (target && target !== dragging) {
-        const rect = target.getBoundingClientRect();
-        const next = (e.clientY - rect.top) / rect.height > 0.5;
-        container.insertBefore(dragging, next ? target.nextSibling : target);
-      }
+      if (!target || target === dragging) return;
+
+      const rect = target.getBoundingClientRect();
+      const next = (e.clientY - rect.top) / rect.height > 0.5;
+      container.insertBefore(dragging, next ? target.nextSibling : target);
     });
   });
 }
-
