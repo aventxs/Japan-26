@@ -607,8 +607,8 @@ body.offline #offbadge { display: block; }
   width: 100%;
   height: 100dvh;
   background: rgba(15,20,32,0.96);
-  border-radius: 22px 22px 0 0;
-  border: 1px solid var(--line);
+  border-radius: 0;
+  border: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
