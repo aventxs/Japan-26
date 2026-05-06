@@ -489,22 +489,54 @@ function renderPacking() {
   const wrap = document.getElementById("pack-container");
   wrap.innerHTML = "";
 
-  PACKING_ITEMS.forEach((item, idx) => {
-    const key = `p-${idx}`;
-    const done = !!state.packing[key];
+  Object.keys(state.packing).forEach((key, idx) => {
+    const item = state.packing[key];
 
     const row = document.createElement("div");
-    row.className = "pack-item" + (done ? " done" : "");
+    row.className = "pack-item" + (item.done ? " done" : "");
     row.dataset.key = key;
 
     row.innerHTML = `
-      <div class="pack-name">${item}</div>
-      <div class="pack-check">${done ? "✓" : ""}</div>
+      <div class="pack-name" contenteditable="true">${item.name}</div>
+      <div class="pack-check">${item.done ? "✓" : ""}</div>
+      <div class="pack-del">✕</div>
     `;
 
-    row.addEventListener("click", () => togglePack(key, row));
+    // Toggle done
+    row.querySelector(".pack-check").addEventListener("click", () => {
+      item.done = !item.done;
+      saveState();
+      renderPacking();
+    });
+
+    // Delete
+    row.querySelector(".pack-del").addEventListener("click", () => {
+      delete state.packing[key];
+      saveState();
+      renderPacking();
+    });
+
+    // Edit name
+    row.querySelector(".pack-name").addEventListener("input", (e) => {
+      item.name = e.target.textContent.trim();
+      saveState();
+    });
+
     wrap.appendChild(row);
   });
+
+  // Add button
+  const addBtn = document.createElement("button");
+  addBtn.className = "edit-add-btn";
+  addBtn.textContent = "+ Add Item";
+  addBtn.addEventListener("click", () => {
+    const id = "p-" + Date.now();
+    state.packing[id] = { name: "New Item", done: false };
+    saveState();
+    renderPacking();
+  });
+
+  wrap.appendChild(addBtn);
 }
 
 function togglePack(key, row) {
@@ -715,7 +747,19 @@ const PHRASES = [
   { jp: "すみません", romaji: "Sumimasen", en: "Excuse me / Sorry" },
   { jp: "お願いします", romaji: "Onegaishimasu", en: "Please" },
   { jp: "英語を話せますか？", romaji: "Eigo o hanasemasu ka?", en: "Do you speak English?" },
-  { jp: "どこですか？", romaji: "Doko desu ka?", en: "Where is it?" }
+  { jp: "どこですか？", romaji: "Doko desu ka?", en: "Where is it?" },
+
+  { jp: "いくらですか？", romaji: "Ikura desu ka?", en: "How much is it?" },
+  { jp: "これをください", romaji: "Kore o kudasai", en: "I'll take this" },
+  { jp: "おすすめはありますか？", romaji: "Osusume wa arimasu ka?", en: "Do you have a recommendation?" },
+  { jp: "大丈夫です", romaji: "Daijoubu desu", en: "I'm okay / No thanks" },
+  { jp: "助けてください", romaji: "Tasukete kudasai", en: "Please help" },
+
+  { jp: "駅はどこですか？", romaji: "Eki wa doko desu ka?", en: "Where is the station?" },
+  { jp: "トイレはどこですか？", romaji: "Toire wa doko desu ka?", en: "Where is the toilet?" },
+  { jp: "道に迷いました", romaji: "Michi ni mayoimashita", en: "I'm lost" },
+  { jp: "写真を撮ってもいいですか？", romaji: "Shashin o totte mo ii desu ka?", en: "May I take a photo?" },
+  { jp: "Wi‑Fiはありますか？", romaji: "Wi‑Fi wa arimasu ka?", en: "Do you have Wi‑Fi?" }
 ];
 
 function renderPhrases() {
