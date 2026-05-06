@@ -47,7 +47,6 @@ body {
   font-family: var(--ui);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
-  /* NOTE: no overflow:hidden here — that was killing scroll */
 }
 
 /* ── GRAIN ── */
@@ -185,7 +184,6 @@ body.offline #offbadge { display: block; }
 }
 .slabel::after { content: ''; flex: 1; height: 1px; background: var(--line); }
 
-
 /* ── COUNTDOWN ── */
 .countdown {
   background: linear-gradient(135deg, rgba(212,168,75,0.1), rgba(232,160,176,0.05));
@@ -299,7 +297,17 @@ body.offline #offbadge { display: block; }
 }
 .day-card.day-open .dc-chevron { transform: rotate(180deg); }
 
-/* Grid accordion — reliable cross-browser */
+/* edit icon */
+.dc-edit {
+  font-size: 14px;
+  color: var(--mist);
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.dc-edit:active { transform: scale(0.9); }
+
+/* Grid accordion */
 .dc-body {
   display: grid; grid-template-rows: 0fr;
   transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
@@ -337,22 +345,15 @@ body.offline #offbadge { display: block; }
 .act-tag {
   font-size: 9px; padding: 2px 6px; border-radius: 5px; letter-spacing: 0.3px; font-weight: 400;
 }
-/* Tag colours by type */
 .tag-food,  .tag-halal { background: rgba(232,160,176,0.14); color: var(--bloom); }
 .tag-travel              { background: rgba(45,212,160,0.1);  color: var(--teal); }
 .tag-fun, .tag-experience{ background: rgba(120,140,255,0.12);color: #a0aaff; }
 .tag-shop                { background: rgba(212,168,75,0.12); color: var(--gold); }
 .tag-walk, .tag-view     { background: rgba(100,180,255,0.1); color: #90c8ff; }
 .tag-rest                { background: rgba(255,255,255,0.07);color: var(--mist); }
-
 .tag-halal,
-.tag-hala {
-  background: #4a6a6a;
-}
-
-.tag-misc {
-  background: var(--line);
-}
+.tag-hala { background: #4a6a6a; }
+.tag-misc { background: var(--line); }
 
 /* ── PACKING LIST ── */
 .pack-wrap { padding: 0 16px; }
@@ -383,16 +384,28 @@ body.offline #offbadge { display: block; }
   font-size: 11px; color: transparent; transition: all 0.2s;
 }
 .pack-item.done .pack-check { background: var(--teal); border-color: var(--teal); color: #fff; }
-.pack-name { flex: 1; font-size: 13px; transition: color 0.2s; }
-.pack-item.done .pack-name { color: var(--mist); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.2); }
-.pack-badge {
-  font-size: 9px; padding: 2px 6px; border-radius: 5px;
-  text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0;
-}
-.badge-must { background: rgba(200,55,45,0.2); color: #f08080; }
-.badge-opt  { background: rgba(255,255,255,0.06); color: var(--fog); }
 
-/* ── BUDGET ── */
+.pack-name {
+  flex: 1;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.pack-item.done .pack-name {
+  color: var(--mist);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255,255,255,0.2);
+}
+
+.pack-del {
+  font-size: 14px;
+  color: var(--fog);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.pack-del:active { transform: scale(0.9); }
+
+/* ── BUDGET (unchanged visual shell) ── */
 .budget-card {
   background: var(--card2); margin: 0 16px 12px;
   padding: 16px; border-radius: var(--radius); border: 1px solid var(--line);
@@ -406,83 +419,6 @@ body.offline #offbadge { display: block; }
 .budget-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--mist); margin-bottom: 6px; }
 .budget-bar { height: 6px; background: var(--line); border-radius: 4px; overflow: hidden; }
 .budget-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--bloom)); width: 0; transition: width 0.4s ease; }
-
-/* Budget split row */
-.budget-split { display: flex; gap: 10px; margin-bottom: 10px; }
-.budget-split-box {
-  flex: 1; background: var(--card); border: 1px solid var(--line);
-  border-radius: 10px; padding: 10px 12px;
-}
-.bsb-label { font-size: 9px; color: var(--mist); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
-.bsb-val { font-size: 16px; font-weight: 600; color: var(--snow); }
-
-.budget-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.budget-cat {
-  display: flex; align-items: center; gap: 5px;
-  padding: 6px 10px; background: var(--card); border: 1px solid var(--line);
-  border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s;
-  user-select: none;
-}
-.budget-cat.active { background: rgba(212,168,75,0.15); border-color: rgba(212,168,75,0.4); color: var(--gold); }
-.budget-cat:active { transform: scale(0.95); }
-
-.budget-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
-.budget-input {
-  flex: 1; padding: 10px 12px; border-radius: 9px;
-  border: 1px solid var(--line); background: var(--card);
-  font-size: 13px; color: var(--snow); font-family: var(--ui); outline: none;
-  transition: border-color 0.2s;
-}
-.budget-input:focus { border-color: var(--gold); }
-.budget-input::placeholder { color: var(--fog); }
-#budget-amt { max-width: 90px; }
-.budget-add-btn {
-  width: 100%; padding: 12px; background: var(--gold); color: #000;
-  border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
-  font-family: var(--ui); cursor: pointer; transition: all 0.2s;
-}
-.budget-add-btn:active { transform: scale(0.97); background: var(--gold2); }
-
-.budget-entries { display: flex; flex-direction: column; gap: 8px; }
-.budget-entry {
-  display: flex; justify-content: space-between; align-items: center;
-  background: var(--card); padding: 11px 12px;
-  border-radius: 10px; border: 1px solid var(--line);
-}
-.budget-entry-left { display: flex; align-items: center; gap: 8px; }
-.budget-entry-ico { font-size: 16px; }
-.budget-entry-desc { font-size: 13px; color: var(--snow); }
-.budget-entry-cat { font-size: 10px; color: var(--mist); }
-.budget-entry-amt { font-size: 14px; font-weight: 600; color: var(--snow); font-family: var(--jp); }
-.budget-entry-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.budget-entry-gbp {
-  font-size: 11px;
-  color: var(--mist);
-  margin-top: 2px;
-}
-
-.budget-del {
-  font-size: 16px;
-  cursor: pointer;
-  color: var(--fog);
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: all 0.2s;
-}
-
-.budget-del:hover {
-  color: var(--seal);
-  background: rgba(200,55,45,0.15);
-}
-
-.budget-del:active {
-  transform: scale(0.85);
-}
 
 /* ── INFO GRID ── */
 .info-grid {
@@ -513,7 +449,7 @@ body.offline #offbadge { display: block; }
 .tip-text { font-size: 12.5px; line-height: 1.55; color: var(--snow); }
 
 /* ── PHRASES ── */
-#phrases-container { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+.phrases-container { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
 .phrase {
   background: var(--card2); padding: 14px;
   border-radius: var(--radius); border: 1px solid var(--line);
@@ -574,6 +510,7 @@ body.offline #offbadge { display: block; }
 }
 @keyframes fall {
   to { transform: translateY(110vh) rotate(480deg); opacity: 0; }
+}
 
 /* ── SCROLL END ── */
 .scroll-end { text-align: center; padding: 16px 0 36px; color: var(--fog); font-size: 16px; letter-spacing: 4px; }
@@ -661,6 +598,11 @@ body.offline #offbadge { display: block; }
   gap: 8px;
 }
 
+.edit-row-top {
+  display: flex;
+  gap: 8px;
+}
+
 .edit-row input {
   width: 100%;
   padding: 10px;
@@ -675,16 +617,32 @@ body.offline #offbadge { display: block; }
   border-color: var(--gold);
 }
 
-/* DELETE BUTTON */
+/* ROW ACTIONS */
+.edit-row-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.edit-move-btn,
 .edit-del {
-  background: rgba(200,55,45,0.15);
-  color: var(--seal);
-  border: 1px solid rgba(200,55,45,0.3);
+  flex: 1;
   padding: 8px 10px;
   border-radius: 8px;
   font-size: 12px;
   cursor: pointer;
-  text-align: center;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--mist);
+}
+.edit-move-btn:active,
+.edit-del:active { transform: scale(0.96); }
+
+.edit-del {
+  background: rgba(200,55,45,0.15);
+  color: var(--seal);
+  border-color: rgba(200,55,45,0.3);
 }
 
 /* ADD + SAVE BUTTONS */
@@ -709,28 +667,4 @@ body.offline #offbadge { display: block; }
 .edit-save-btn {
   background: var(--gold);
   color: #000;
-}
-
-/* DRAG HANDLE */
-.edit-drag {
-  font-size: 18px;
-  color: var(--mist);
-  cursor: grab;
-  text-align: center;
-  margin-bottom: 6px;
-}
-
-/* =========================================================
-   DAY HEADER EDIT ICON (✎)
-   ========================================================= */
-
-.dc-edit {
-  font-size: 14px;
-  color: var(--mist);
-  margin-left: 10px;
-  cursor: pointer;
-  user-select: none;
-}
-.dc-edit:active {
-  transform: scale(0.9);
 }
