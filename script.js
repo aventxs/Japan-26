@@ -995,6 +995,9 @@ function enableDragSort(container) {
     row.addEventListener("dragend", () => {
       row.style.opacity = "1";
       dragging = null;
+
+      const rows = container.querySelectorAll(".edit-row");
+      rows.forEach((r, i) => r.dataset.index = i);
     });
 
     row.addEventListener("dragover", (e) => {
@@ -1004,7 +1007,13 @@ function enableDragSort(container) {
 
       const rect = target.getBoundingClientRect();
       const next = (e.clientY - rect.top) / rect.height > 0.5;
+
       container.insertBefore(dragging, next ? target.nextSibling : target);
+    });
+
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
     });
   });
 }
+
