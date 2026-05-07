@@ -987,17 +987,21 @@ function enableDragSort(container) {
   container.querySelectorAll(".edit-row").forEach(row => {
     row.draggable = true;
 
-    row.addEventListener("dragstart", () => {
+    row.addEventListener("dragstart", (e) => {
       dragging = row;
-      row.style.opacity = "0.4";
+      row.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", "");
     });
 
     row.addEventListener("dragend", () => {
-      row.style.opacity = "1";
+      row.classList.remove("dragging");
       dragging = null;
 
-      const rows = container.querySelectorAll(".edit-row");
-      rows.forEach((r, i) => r.dataset.index = i);
+      // Reindex after drop
+      container.querySelectorAll(".edit-row").forEach((r, i) => {
+        r.dataset.index = i;
+      });
     });
 
     row.addEventListener("dragover", (e) => {
@@ -1006,9 +1010,13 @@ function enableDragSort(container) {
       if (!target || target === dragging) return;
 
       const rect = target.getBoundingClientRect();
-      const next = (e.clientY - rect.top) / rect.height > 0.5;
+      const midpoint = rect.top + rect.height / 2;
 
-      container.insertBefore(dragging, next ? target.nextSibling : target);
+      if (e.clientY < midpoint) {
+        container.insertBefore(dragging, target);
+      } else {
+        container.insertBefore(dragging, target.nextSibling);
+      }
     });
 
     row.addEventListener("drop", (e) => {
@@ -1016,4 +1024,5 @@ function enableDragSort(container) {
     });
   });
 }
+
 
