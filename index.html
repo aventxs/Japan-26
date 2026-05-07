@@ -103,15 +103,36 @@
     <!-- TRIP VIEW -->
     <div class="view active" id="view-trip">
 
-      <div class="slabel">Countdown</div>
-      <div class="countdown" id="countdown-card">
-        <div class="cd-num" id="cd-num">—</div>
-        <div class="cd-info">
-          <div class="cd-label" id="cd-label">Days to go</div>
-          <div class="cd-date" id="cd-date">Tokyo · 09–20 May 2026</div>
-        </div>
-        <div class="cd-icon">🏯</div>
-      </div>
+      <div class="slabel">Photo Memory</div>
+<div class="memory-photo-card">
+  <div class="memory-photo-frame" id="memory-photo-frame">
+    <img id="memory-photo-img" src="" alt="Trip Memory" style="display:none;">
+    <div class="memory-photo-placeholder" id="memory-photo-placeholder">
+      <div>📸</div>
+      <div class="mp-text">Tap to add a photo</div>
+    </div>
+  </div>
+  <input type="file" id="memory-photo-input" accept="image/*" style="display:none;">
+  <div class="memory-photo-caption">
+    <input id="memory-photo-caption" placeholder="Add a caption…" />
+  </div>
+</div>
+
+      <div class="slabel">Weather Memory</div>
+<div class="weather-memory-card">
+  <div class="wm-row">
+    <div class="wm-city">Tokyo</div>
+    <div class="wm-weather" id="wm-tokyo">—</div>
+  </div>
+  <div class="wm-row">
+    <div class="wm-city">Kyoto</div>
+    <div class="wm-weather" id="wm-kyoto">—</div>
+  </div>
+  <div class="wm-row">
+    <div class="wm-city">Osaka</div>
+    <div class="wm-weather" id="wm-osaka">—</div>
+  </div>
+</div>
 
       <div class="slabel">Overall Progress</div>
       <div class="progress-wrap">
