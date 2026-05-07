@@ -215,6 +215,76 @@ document.addEventListener("DOMContentLoaded", () => {
   setupBudgetAdd();
 });
 
+// PHOTO MEMORY
+const photoInput = document.getElementById("memory-photo-input");
+const photoFrame = document.getElementById("memory-photo-frame");
+const photoImg = document.getElementById("memory-photo-img");
+const photoPlaceholder = document.getElementById("memory-photo-placeholder");
+const photoCaption = document.getElementById("memory-photo-caption");
+
+// Load saved photo + caption
+(function loadPhotoMemory() {
+  const savedPhoto = localStorage.getItem("jp26-photo");
+  const savedCaption = localStorage.getItem("jp26-photo-caption");
+
+  if (savedPhoto) {
+    photoImg.src = savedPhoto;
+    photoImg.style.display = "block";
+    photoPlaceholder.style.display = "none";
+  }
+
+  if (savedCaption) {
+    photoCaption.value = savedCaption;
+  }
+})();
+
+// Tap frame → open file picker
+photoFrame.addEventListener("click", () => {
+  photoInput.click();
+});
+
+// When user selects a photo
+photoInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const dataURL = reader.result;
+    localStorage.setItem("jp26-photo", dataURL);
+
+    photoImg.src = dataURL;
+    photoImg.style.display = "block";
+    photoPlaceholder.style.display = "none";
+  };
+  reader.readAsDataURL(file);
+});
+
+// Save caption
+photoCaption.addEventListener("input", () => {
+  localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
+});
+
+
+/* =========================================================
+   Weather
+============================================================== */
+
+// WEATHER MEMORY (static dataset)
+const WEATHER_DATA = {
+  tokyo:  "22–25°C · Mostly sunny",
+  kyoto:  "20–23°C · Cloudy / mild sun",
+  osaka:  "23–25°C · Clear skies"
+};
+
+function loadWeatherMemory() {
+  document.getElementById("wm-tokyo").textContent = WEATHER_DATA.tokyo;
+  document.getElementById("wm-kyoto").textContent = WEATHER_DATA.kyoto;
+  document.getElementById("wm-osaka").textContent = WEATHER_DATA.osaka;
+}
+
+loadWeatherMemory();
+
 /* =========================================================
    TAG CLASS MAP
    ========================================================= */
@@ -442,27 +512,6 @@ function renderRoute() {
       wrap.appendChild(line);
     }
   });
-}
-
-/* =========================================================
-   COUNTDOWN
-   ========================================================= */
-function updateCountdown() {
-  const num = document.getElementById("cd-num");
-  const label = document.getElementById("cd-label");
-
-  const now = new Date();
-  const diff = TRIP_START - now;
-
-  if (diff <= 0) {
-    num.textContent = "0";
-    label.textContent = "Trip in progress";
-    return;
-  }
-
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-  num.textContent = days;
-  label.textContent = days === 1 ? "Day to go" : "Days to go";
 }
 
 /* =========================================================
