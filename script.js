@@ -208,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPhrases();
   renderNotes();
   updateProgress();
-  updateCountdown();
   setupTabs();
   setupInstallBanner();
   setupOfflineBadge();
