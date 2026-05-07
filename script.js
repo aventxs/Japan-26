@@ -213,17 +213,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInstallBanner();
   setupOfflineBadge();
   setupBudgetAdd();
-});
 
-// PHOTO MEMORY
-const photoInput = document.getElementById("memory-photo-input");
-const photoFrame = document.getElementById("memory-photo-frame");
-const photoImg = document.getElementById("memory-photo-img");
-const photoPlaceholder = document.getElementById("memory-photo-placeholder");
-const photoCaption = document.getElementById("memory-photo-caption");
+  // PHOTO MEMORY
+  const photoInput = document.getElementById("memory-photo-input");
+  const photoFrame = document.getElementById("memory-photo-frame");
+  const photoImg = document.getElementById("memory-photo-img");
+  const photoPlaceholder = document.getElementById("memory-photo-placeholder");
+  const photoCaption = document.getElementById("memory-photo-caption");
 
-// Load saved photo + caption
-(function loadPhotoMemory() {
+  // Load saved photo + caption
   const savedPhoto = localStorage.getItem("jp26-photo");
   const savedCaption = localStorage.getItem("jp26-photo-caption");
 
@@ -236,33 +234,44 @@ const photoCaption = document.getElementById("memory-photo-caption");
   if (savedCaption) {
     photoCaption.value = savedCaption;
   }
-})();
 
-// Tap frame → open file picker
-photoFrame.addEventListener("click", () => {
-  photoInput.click();
-});
+  // Tap frame → open file picker
+  photoFrame.addEventListener("click", () => {
+    photoInput.click();
+  });
 
-// When user selects a photo
-photoInput.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  // When user selects a photo
+  photoInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = () => {
-    const dataURL = reader.result;
-    localStorage.setItem("jp26-photo", dataURL);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataURL = reader.result;
+      localStorage.setItem("jp26-photo", dataURL);
 
-    photoImg.src = dataURL;
-    photoImg.style.display = "block";
-    photoPlaceholder.style.display = "none";
+      photoImg.src = dataURL;
+      photoImg.style.display = "block";
+      photoPlaceholder.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Save caption
+  photoCaption.addEventListener("input", () => {
+    localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
+  });
+
+  // WEATHER MEMORY
+  const WEATHER_DATA = {
+    tokyo:  "22–25°C · Mostly sunny",
+    kyoto:  "20–23°C · Cloudy / mild sun",
+    osaka:  "23–25°C · Clear skies"
   };
-  reader.readAsDataURL(file);
-});
 
-// Save caption
-photoCaption.addEventListener("input", () => {
-  localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
+  document.getElementById("wm-tokyo").textContent = WEATHER_DATA.tokyo;
+  document.getElementById("wm-kyoto").textContent = WEATHER_DATA.kyoto;
+  document.getElementById("wm-osaka").textContent = WEATHER_DATA.osaka;
 });
 
 
