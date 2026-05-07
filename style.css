@@ -377,6 +377,10 @@ body.offline #offbadge { display: block; }
   touch-action: none;
 }
 
+.edit-row.dragging {
+  opacity: 0.4;
+}
+
 /* ── PACKING LIST ── */
 .pack-wrap { padding: 0 16px; }
 .pack-cat { margin-bottom: 14px; }
