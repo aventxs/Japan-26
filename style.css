@@ -372,6 +372,11 @@ body.offline #offbadge { display: block; }
   background: var(--line);
 }
 
+.edit-body, 
+#edit-activities {
+  touch-action: none;
+}
+
 /* ── PACKING LIST ── */
 .pack-wrap { padding: 0 16px; }
 .pack-cat { margin-bottom: 14px; }
