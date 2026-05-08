@@ -824,7 +824,7 @@ body.offline #offbadge { display: block; }
   animation:
     fall var(--fall) linear forwards,
     sway var(--sway) ease-in-out infinite,
-    spin var(--spin) linear infinite;
+    petalSpin var(--spin) linear infinite;
 }
 
 /* CURVED FALL PATH */
