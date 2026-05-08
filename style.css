@@ -815,7 +815,7 @@ body.offline #offbadge { display: block; }
   height: var(--size);
   background-image: url('data:image/svg+xml;utf8,\
 <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">\
-<path d="M32 6c-6 8-18 14-18 26 0 10 8 18 18 18s18-8 18-18c0-12-12-18-18-26z" fill="%23ffb7c5"/>\
+<path d="M32 6c-8 10-22 16-18 30 4 14 18 16 24 10 6-6 10-20 4-30-4-6-6-8-10-10z" fill="%23ffb7c5"/>\
 </svg>');
   background-size: cover;
   opacity: var(--opacity);
@@ -839,8 +839,9 @@ body.offline #offbadge { display: block; }
 }
 
 @keyframes spin {
-  0%   { rotate: 0deg; }
-  100% { rotate: 360deg; }
+  0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  50%  { transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg); }
+  100% { transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg); }
 }
 
 
