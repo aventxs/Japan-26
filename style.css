@@ -812,18 +812,25 @@ body.offline #offbadge { display: block; }
   top: -10px;
   width: var(--size);
   height: var(--size);
+  pointer-events: none;
+  z-index: 9999;
+
+  animation:
+    fall var(--fall) linear forwards,
+    sway var(--sway) ease-in-out infinite;
+}
+
+.petal-inner {
+  width: 100%;
+  height: 100%;
   background-image: url('data:image/svg+xml;utf8,\
 <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">\
 <path d="M32 6c-8 10-22 16-18 30 4 14 18 16 24 10 6-6 10-20 4-30-4-6-6-8-10-10z" fill="%23ffb7c5"/>\
 </svg>');
   background-size: cover;
   opacity: var(--opacity);
-  pointer-events: none;
-  z-index: 9999;
 
   animation:
-    fall var(--fall) linear forwards,
-    sway var(--sway) ease-in-out infinite,
     petalSpin var(--spin) linear infinite;
 }
 
