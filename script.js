@@ -841,6 +841,10 @@ function spawnPetal() {
   const petal = document.createElement("div");
   petal.className = "petal";
 
+  const inner = document.createElement("div");
+  inner.className = "petal-inner";
+  petal.appendChild(inner);
+
   // Size, opacity, timing
   const size = Math.random() * 18 + 12;      // 12–30px
   const fall = Math.random() * 4 + 6;        // 6–10s
@@ -848,7 +852,7 @@ function spawnPetal() {
   const spin = Math.random() * 4 + 4;        // 4–8s
   const opacity = Math.random() * 0.4 + 0.4; // 0.4–0.8
 
-  // Multi‑curve drift (fixes raindrop look)
+  // Multi‑curve drift
   const drift1 = (Math.random() * 60 - 30) + "px";
   const drift2 = (Math.random() * 80 - 40) + "px";
   const drift3 = (Math.random() * 100 - 50) + "px";
@@ -872,6 +876,7 @@ function spawnPetal() {
   // Remove after fall completes
   setTimeout(() => petal.remove(), fall * 1000);
 }
+
 
 /* =========================================================
    RESET BUTTON
