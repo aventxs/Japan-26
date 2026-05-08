@@ -871,7 +871,7 @@ function spawnPetal() {
   petal.style.setProperty("--drift2", drift2);
   petal.style.setProperty("--drift3", drift3);
 
-  document.body.appendChild(petal);
+  document.querySelector("html").appendChild(petal);
 
   // Remove after fall completes
   setTimeout(() => petal.remove(), fall * 1000);
