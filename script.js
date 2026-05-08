@@ -213,14 +213,15 @@ document.addEventListener("DOMContentLoaded", () => {
   setupOfflineBadge();
   setupBudgetAdd();
 
-  // PHOTO MEMORY
-  const photoInput = document.getElementById("memory-photo-input");
-  const photoFrame = document.getElementById("memory-photo-frame");
-  const photoImg = document.getElementById("memory-photo-img");
-  const photoPlaceholder = document.getElementById("memory-photo-placeholder");
-  const photoCaption = document.getElementById("memory-photo-caption");
+// PHOTO MEMORY (safe mode)
+const photoInput = document.getElementById("memory-photo-input");
+const photoFrame = document.getElementById("memory-photo-frame");
+const photoImg = document.getElementById("memory-photo-img");
+const photoPlaceholder = document.getElementById("memory-photo-placeholder");
+const photoCaption = document.getElementById("memory-photo-caption");
 
-  // Load saved photo + caption
+if (photoInput && photoFrame && photoImg && photoPlaceholder && photoCaption) {
+
   const savedPhoto = localStorage.getItem("jp26-photo");
   const savedCaption = localStorage.getItem("jp26-photo-caption");
 
@@ -234,12 +235,10 @@ document.addEventListener("DOMContentLoaded", () => {
     photoCaption.value = savedCaption;
   }
 
-  // Tap frame → open file picker
   photoFrame.addEventListener("click", () => {
     photoInput.click();
   });
 
-  // When user selects a photo
   photoInput.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -256,11 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // Save caption
   photoCaption.addEventListener("input", () => {
     localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
   });
-});
+}
+
 
 
 /* =========================================================
