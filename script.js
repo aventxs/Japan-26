@@ -827,25 +827,37 @@ function renderNotes() {
 /* =========================================================
    PETALS ANIMATION
    ========================================================= */
-const petalBtn = document.getElementById("petal-btn");
-if (petalBtn) {
-  petalBtn.addEventListener("click", () => {
-    for (let i = 0; i < 18; i++) spawnPetal();
-  });
-}
-
 function spawnPetal() {
-  const p = document.createElement("div");
-  p.className = "petal";
+  const petal = document.createElement("div");
+  petal.className = "petal";
 
-  p.style.left = Math.random() * 100 + "vw";
-  p.style.animationDuration = 4 + Math.random() * 3 + "s";
-  p.style.opacity = 0.6 + Math.random() * 0.4;
-  p.style.zIndex = 9999;
+  const size = Math.random() * 18 + 12; // 12–30px
+  const fall = Math.random() * 4 + 6;   // 6–10s
+  const sway = Math.random() * 3 + 3;   // 3–6s
+  const spin = Math.random() * 4 + 4;   // 4–8s
+  const drift = (Math.random() * 80 - 40) + "px"; // -40 to +40px
+  const opacity = Math.random() * 0.4 + 0.4; // 0.4–0.8
 
-  document.body.appendChild(p);
-  setTimeout(() => p.remove(), 7000);
+  petal.style.left = Math.random() * 100 + "vw";
+
+  petal.style.setProperty("--size", size + "px");
+  petal.style.setProperty("--fall", fall + "s");
+  petal.style.setProperty("--sway", sway + "s");
+  petal.style.setProperty("--spin", spin + "s");
+  petal.style.setProperty("--drift", drift);
+  petal.style.setProperty("--opacity", opacity);
+
+  document.body.appendChild(petal);
+
+  setTimeout(() => petal.remove(), fall * 1000);
 }
+
+document.getElementById("petal-btn").addEventListener("click", () => {
+  for (let i = 0; i < 22; i++) {
+    setTimeout(spawnPetal, i * 120);
+  }
+});
+
 
 /* =========================================================
    RESET BUTTON
