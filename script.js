@@ -824,6 +824,19 @@ function renderNotes() {
   });
 }
 
+/* ===========================================
+    PETALS
+   =========================================== */
+
+const petalBtn = document.getElementById("petal-btn");
+if (petalBtn) {
+  petalBtn.addEventListener("click", () => {
+    for (let i = 0; i < 22; i++) {
+      setTimeout(spawnPetal, i * 120);
+    }
+  });
+}
+
 function spawnPetal() {
   const petal = document.createElement("div");
   petal.className = "petal";
