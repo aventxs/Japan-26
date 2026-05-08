@@ -260,17 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
   photoCaption.addEventListener("input", () => {
     localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
   });
-
-  // WEATHER MEMORY
-  const WEATHER_DATA = {
-    tokyo:  "22–25°C · Mostly sunny",
-    kyoto:  "20–23°C · Cloudy / mild sun",
-    osaka:  "23–25°C · Clear skies"
-  };
-
-  document.getElementById("wm-tokyo").textContent = WEATHER_DATA.tokyo;
-  document.getElementById("wm-kyoto").textContent = WEATHER_DATA.kyoto;
-  document.getElementById("wm-osaka").textContent = WEATHER_DATA.osaka;
 });
 
 
