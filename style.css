@@ -807,23 +807,42 @@ body.offline #offbadge { display: block; }
 .bni { font-size: 18px; }
 
 /* ── PETALS ── */
+/* REALISTIC SAKURA PETALS */
 .petal {
   position: fixed;
-  top: -20px;
-  width: 14px;
-  height: 22px;
-  background: #ffd6e8;
-  border-radius: 70% 70% 100% 100%;
-  transform-origin: center;
-  opacity: 0.9;
+  top: -10px;
+  width: var(--size);
+  height: var(--size);
+  background-image: url('data:image/svg+xml;utf8,\
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">\
+<path d="M32 6c-6 8-18 14-18 26 0 10 8 18 18 18s18-8 18-18c0-12-12-18-18-26z" fill="%23ffb7c5"/>\
+</svg>');
+  background-size: cover;
+  opacity: var(--opacity);
   pointer-events: none;
-  animation: fall linear forwards;
-  z-index: 2147483647;
+  z-index: 9999;
+  animation: fall var(--fall) linear forwards,
+             sway var(--sway) ease-in-out infinite,
+             spin var(--spin) linear infinite;
 }
 
 @keyframes fall {
-  to { transform: translateY(110vh) rotate(480deg); opacity: 0; }
+  to {
+    transform: translateY(110vh) translateX(var(--drift));
+  }
 }
+
+@keyframes sway {
+  0%   { margin-left: 0px; }
+  50%  { margin-left: 12px; }
+  100% { margin-left: 0px; }
+}
+
+@keyframes spin {
+  0%   { rotate: 0deg; }
+  100% { rotate: 360deg; }
+}
+
 
 /* ── EDIT MODAL ── */
 .edit-modal {
