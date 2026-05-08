@@ -491,6 +491,28 @@ function renderRoute() {
 }
 
 /* =========================================================
+   COUNTDOWN
+   ========================================================= */
+function updateCountdown() {
+  const num = document.getElementById("cd-num");
+  const label = document.getElementById("cd-label");
+
+  const now = new Date();
+  const diff = TRIP_START - now;
+
+  if (diff <= 0) {
+    num.textContent = "0";
+    label.textContent = "Trip in progress";
+    return;
+  }
+
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  num.textContent = days;
+  label.textContent = days === 1 ? "Day to go" : "Days to go";
+}
+
+
+/* =========================================================
    PACKING LIST
    ========================================================= */
 const PACKING_ITEMS = [
