@@ -213,73 +213,53 @@ document.addEventListener("DOMContentLoaded", () => {
   setupOfflineBadge();
   setupBudgetAdd();
 
-// PHOTO MEMORY (safe mode)
-const photoInput = document.getElementById("memory-photo-input");
-const photoFrame = document.getElementById("memory-photo-frame");
-const photoImg = document.getElementById("memory-photo-img");
-const photoPlaceholder = document.getElementById("memory-photo-placeholder");
-const photoCaption = document.getElementById("memory-photo-caption");
+  // PHOTO MEMORY (safe mode)
+  const photoInput = document.getElementById("memory-photo-input");
+  const photoFrame = document.getElementById("memory-photo-frame");
+  const photoImg = document.getElementById("memory-photo-img");
+  const photoPlaceholder = document.getElementById("memory-photo-placeholder");
+  const photoCaption = document.getElementById("memory-photo-caption");
 
-if (photoInput && photoFrame && photoImg && photoPlaceholder && photoCaption) {
+  if (photoInput && photoFrame && photoImg && photoPlaceholder && photoCaption) {
+    const savedPhoto = localStorage.getItem("jp26-photo");
+    const savedCaption = localStorage.getItem("jp26-photo-caption");
 
-  const savedPhoto = localStorage.getItem("jp26-photo");
-  const savedCaption = localStorage.getItem("jp26-photo-caption");
-
-  if (savedPhoto) {
-    photoImg.src = savedPhoto;
-    photoImg.style.display = "block";
-    photoPlaceholder.style.display = "none";
-  }
-
-  if (savedCaption) {
-    photoCaption.value = savedCaption;
-  }
-
-  photoFrame.addEventListener("click", () => {
-    photoInput.click();
-  });
-
-  photoInput.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataURL = reader.result;
-      localStorage.setItem("jp26-photo", dataURL);
-
-      photoImg.src = dataURL;
+    if (savedPhoto) {
+      photoImg.src = savedPhoto;
       photoImg.style.display = "block";
       photoPlaceholder.style.display = "none";
-    };
-    reader.readAsDataURL(file);
-  });
+    }
 
-  photoCaption.addEventListener("input", () => {
-    localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
-  });
-}
+    if (savedCaption) {
+      photoCaption.value = savedCaption;
+    }
 
+    photoFrame.addEventListener("click", () => {
+      photoInput.click();
+    });
 
+    photoInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-/* =========================================================
-   Weather
-============================================================== */
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataURL = reader.result;
+        localStorage.setItem("jp26-photo", dataURL);
 
-// WEATHER MEMORY (static dataset)
-const WEATHER_DATA = {
-  tokyo:  "22–25°C · Mostly sunny",
-  kyoto:  "20–23°C · Cloudy / mild sun",
-  osaka:  "23–25°C · Clear skies"
-};
+        photoImg.src = dataURL;
+        photoImg.style.display = "block";
+        photoPlaceholder.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
 
-function loadWeatherMemory() {
-  document.getElementById("wm-tokyo").textContent = WEATHER_DATA.tokyo;
-  document.getElementById("wm-kyoto").textContent = WEATHER_DATA.kyoto;
-  document.getElementById("wm-osaka").textContent = WEATHER_DATA.osaka;
-}
+    photoCaption.addEventListener("input", () => {
+      localStorage.setItem("jp26-photo-caption", photoCaption.value.trim());
+    });
+  }
+});
 
-loadWeatherMemory();
 
 /* =========================================================
    TAG CLASS MAP
