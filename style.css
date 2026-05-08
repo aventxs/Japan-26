@@ -807,7 +807,6 @@ body.offline #offbadge { display: block; }
 .bni { font-size: 18px; }
 
 /* ── PETALS ── */
-/* REALISTIC SAKURA PETALS */
 .petal {
   position: fixed;
   top: -10px;
@@ -821,11 +820,14 @@ body.offline #offbadge { display: block; }
   opacity: var(--opacity);
   pointer-events: none;
   z-index: 9999;
-  animation: fall var(--fall) linear forwards,
-             sway var(--sway) ease-in-out infinite,
-             spin var(--spin) linear infinite;
+
+  animation:
+    fall var(--fall) linear forwards,
+    sway var(--sway) ease-in-out infinite,
+    spin var(--spin) linear infinite;
 }
 
+/* CURVED FALL PATH */
 @keyframes fall {
   0%   { transform: translateX(0) translateY(0); }
   30%  { transform: translateX(var(--drift1)) translateY(30vh); }
@@ -833,12 +835,14 @@ body.offline #offbadge { display: block; }
   100% { transform: translateX(var(--drift3)) translateY(110vh); }
 }
 
+/* SIDE-TO-SIDE SWAY */
 @keyframes sway {
   0%   { margin-left: 0px; }
   50%  { margin-left: 12px; }
   100% { margin-left: 0px; }
 }
 
+/* TUMBLE ROTATION */
 @keyframes spin {
   0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
   50%  { transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg); }
