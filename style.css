@@ -266,7 +266,9 @@ body.offline #offbadge { display: block; }
   color: var(--mist);
 }
 
-/* -- Weather v1 -- */
+.slabel + div {
+  margin-top: 8px;
+}
 
 /* CINEMATIC WEATHER MEMORY */
 .weather-cinematic {
