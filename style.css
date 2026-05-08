@@ -827,9 +827,10 @@ body.offline #offbadge { display: block; }
 }
 
 @keyframes fall {
-  to {
-    transform: translateY(110vh) translateX(var(--drift));
-  }
+  0%   { transform: translateX(0) translateY(0); }
+  30%  { transform: translateX(var(--drift1)) translateY(30vh); }
+  60%  { transform: translateX(var(--drift2)) translateY(60vh); }
+  100% { transform: translateX(var(--drift3)) translateY(110vh); }
 }
 
 @keyframes sway {
