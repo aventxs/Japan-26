@@ -824,40 +824,41 @@ function renderNotes() {
   });
 }
 
-/* =========================================================
-   PETALS ANIMATION
-   ========================================================= */
 function spawnPetal() {
   const petal = document.createElement("div");
   petal.className = "petal";
 
-  const size = Math.random() * 18 + 12; // 12–30px
-  const fall = Math.random() * 4 + 6;   // 6–10s
-  const sway = Math.random() * 3 + 3;   // 3–6s
-  const spin = Math.random() * 4 + 4;   // 4–8s
-  const drift = (Math.random() * 80 - 40) + "px"; // -40 to +40px
+  // Size, opacity, timing
+  const size = Math.random() * 18 + 12;      // 12–30px
+  const fall = Math.random() * 4 + 6;        // 6–10s
+  const sway = Math.random() * 3 + 3;        // 3–6s
+  const spin = Math.random() * 4 + 4;        // 4–8s
   const opacity = Math.random() * 0.4 + 0.4; // 0.4–0.8
 
+  // Multi‑curve drift (fixes raindrop look)
+  const drift1 = (Math.random() * 60 - 30) + "px";
+  const drift2 = (Math.random() * 80 - 40) + "px";
+  const drift3 = (Math.random() * 100 - 50) + "px";
+
+  // Random horizontal start
   petal.style.left = Math.random() * 100 + "vw";
 
+  // Apply CSS variables
   petal.style.setProperty("--size", size + "px");
   petal.style.setProperty("--fall", fall + "s");
   petal.style.setProperty("--sway", sway + "s");
   petal.style.setProperty("--spin", spin + "s");
-  petal.style.setProperty("--drift", drift);
   petal.style.setProperty("--opacity", opacity);
+
+  petal.style.setProperty("--drift1", drift1);
+  petal.style.setProperty("--drift2", drift2);
+  petal.style.setProperty("--drift3", drift3);
 
   document.body.appendChild(petal);
 
+  // Remove after fall completes
   setTimeout(() => petal.remove(), fall * 1000);
 }
-
-document.getElementById("petal-btn").addEventListener("click", () => {
-  for (let i = 0; i < 22; i++) {
-    setTimeout(spawnPetal, i * 120);
-  }
-});
-
 
 /* =========================================================
    RESET BUTTON
